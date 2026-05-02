@@ -1,0 +1,1218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LeafTex — Farm to Fashion. Trace your thread.</title>
+<meta name="description" content="LeafTex converts banana waste into premium fiber, vegan leather, and edible coatings — with native blockchain traceability." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=4">
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+  <script type="text/babel" data-presets="react">
+// Shared primitives — brand-matched
+const { useEffect, useRef, useState } = React;
+
+function ImgPlaceholder({ code, prompt, ratio = "4 / 3", dark = false, style = {} }) {
+  return (
+    <div
+      className={`img-placeholder ${dark ? "dark" : ""}`}
+      style={{ aspectRatio: ratio, ...style }}
+    >
+      <div className="ph-corner">{code}</div>
+      <div className="ph-caption">
+        <div style={{ opacity: 0.55, marginBottom: 8, fontSize: 9 }}>// designer prompt</div>
+        {prompt}
+      </div>
+    </div>
+  );
+}
+
+function Reveal({ children, delay = 0, as: Tag = "div", className = "", ...rest }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => setVisible(true), delay);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.12 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [delay]);
+  return (
+    <Tag ref={ref} className={`reveal ${visible ? "in" : ""} ${className}`} {...rest}>
+      {children}
+    </Tag>
+  );
+}
+
+function SectionHead({ code, label, title, subtitle }) {
+  return (
+    <div className="section-head">
+      <div className="meta">
+        <span className="code">{code}</span>
+        <span>{label}</span>
+      </div>
+      <div>
+        {title && <h2 className="display-l" style={{ margin: 0, maxWidth: "20ch" }}>{title}</h2>}
+        {subtitle && <p className="body-l" style={{ marginTop: 20, maxWidth: "58ch" }}>{subtitle}</p>}
+      </div>
+    </div>
+  );
+}
+
+function Counter({ to, duration = 1400, prefix = "", suffix = "", decimals = 0 }) {
+  const [val, setVal] = useState(0);
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let started = false;
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !started) {
+        started = true;
+        const start = performance.now();
+        const tick = (t) => {
+          const p = Math.min(1, (t - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          setVal(to * eased);
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [to, duration]);
+  const display = decimals > 0 ? val.toFixed(decimals) : Math.round(val).toLocaleString();
+  return <span ref={ref}>{prefix}{display}{suffix}</span>;
+}
+
+// Brand logo wordmark — "leaftex bio" with green "f"
+function Wordmark({ size = 24, dark = false }) {
+  // size = approximate cap-height in px
+  const fontSize = size;
+  const ink = dark ? "#ffffff" : "#0e1116";
+  const grey = dark ? "#9aa3ad" : "#9aa3ad";
+  return (
+    <span style={{
+      fontFamily: "var(--display)",
+      fontWeight: 800,
+      fontSize,
+      letterSpacing: "-0.04em",
+      lineHeight: 1,
+      display: "inline-flex",
+      alignItems: "baseline",
+      gap: fontSize * 0.18,
+      color: ink,
+    }}>
+      <span>
+        lea<span style={{ color: "#18C25A" }}>f</span>tex
+      </span>
+      <span style={{ color: grey, fontWeight: 700 }}>bio</span>
+    </span>
+  );
+}
+
+Object.assign(window, { ImgPlaceholder, Reveal, SectionHead, Counter, Wordmark });
+  </script>
+
+  <script type="text/babel" data-presets="react">
+function Nav() {
+  const [scrolled, setScrolled] = React.useState(false);
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const navStyle = {
+    position: "fixed",
+    top: 0, left: 0, right: 0,
+    zIndex: 60,
+    transition: "background 220ms ease, border-color 220ms ease, backdrop-filter 220ms ease, box-shadow 220ms ease",
+    background: scrolled ? "rgba(255,255,255,0.85)" : "transparent",
+    backdropFilter: scrolled ? "blur(14px) saturate(140%)" : "none",
+    WebkitBackdropFilter: scrolled ? "blur(14px) saturate(140%)" : "none",
+    borderBottom: scrolled ? "1px solid var(--rule)" : "1px solid transparent",
+  };
+
+  return (
+    <>
+      <div className="brand-strip" style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 70 }} />
+      <nav style={{ ...navStyle, top: 4 }}>
+        <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}>
+          <a href="#top" style={{ display: "inline-flex", alignItems: "baseline", textDecoration: "none" }}>
+            <Wordmark size={22} />
+          </a>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 32 }} className="nav-links">
+            {[
+              ["Platform", "#platform"],
+              ["Products", "#products"],
+              ["Process", "#process"],
+              ["Traceability", "#traceability"],
+              ["Team", "#team"],
+            ].map(([label, href]) => (
+              <a key={href} href={href} style={{
+                fontFamily: "var(--sans)",
+                fontSize: 14,
+                fontWeight: 600,
+                color: "var(--ink-2)",
+                textDecoration: "none",
+              }}>{label}</a>
+            ))}
+          </div>
+
+          <a href="#contact" className="btn btn-green" style={{ padding: "10px 18px", fontSize: 13 }}>
+            Partner with us
+            <span className="arrow">→</span>
+          </a>
+        </div>
+        <style>{`
+          @media (max-width: 900px) { .nav-links { display: none !important; } }
+        `}</style>
+      </nav>
+    </>
+  );
+}
+
+window.Nav = Nav;
+  </script>
+
+  <script type="text/babel" data-presets="react">
+// Hero centerpiece: animated pseudostem cross-section.
+// Each ring is a separate stroked circle drawn outermost-first; the
+// inner layers naturally cover the inner part of outer rings without
+// any overdraw. Active state is purely a stroke-width / opacity change.
+
+function StemCrossSection() {
+  const layers = [
+    {
+      id: "outer",
+      name: "Outer Sheath",
+      product: "Banana Fiber",
+      yield: "12% — 120 kg / t",
+      color: "#18C25A",
+      r: 168, ringWidth: 30,
+      labelAngle: -55,
+      desc: "Mechanically extracted, degummed, combed. Spinner-ready bales.",
+    },
+    {
+      id: "inner",
+      name: "Inner Sheath",
+      product: "Vegan Leather",
+      yield: "18% — 180 kg / t",
+      color: "#0c5c2e",
+      r: 123, ringWidth: 46,
+      labelAngle: 55,
+      desc: "Fiber mats pressed and finished into supple, customizable sheets.",
+    },
+    {
+      id: "pith",
+      name: "Pith Core",
+      product: "Leaf-Guard™",
+      yield: "14% — 140 L / t",
+      color: "#f0c429",
+      r: 0, ringWidth: 0, // drawn as solid disc below
+      labelAngle: 180,
+      desc: "Starch-based edible coating. +40–60% produce shelf-life.",
+    },
+  ];
+
+  const [active, setActive] = React.useState(0);
+  const [paused, setPaused] = React.useState(false);
+
+  React.useEffect(() => {
+    if (paused) return;
+    const id = setInterval(() => setActive((a) => (a + 1) % layers.length), 2400);
+    return () => clearInterval(id);
+  }, [paused, layers.length]);
+
+  const cx = 200, cy = 200;
+  const pithR = 78; // solid pith disc
+
+  return (
+    <div
+      style={{ position: "relative", width: "100%" }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <svg viewBox="0 0 400 420" style={{ width: "100%", height: "auto", display: "block" }}>
+        <defs>
+          <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#18C25A" stopOpacity="0.10" />
+            <stop offset="70%" stopColor="#18C25A" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+
+        {/* ambient glow */}
+        <circle cx={cx} cy={cy} r="180" fill="url(#bgGlow)" />
+
+        {/* OUTER ring — drawn as a stroked circle so we don't have to mask */}
+        <circle
+          cx={cx} cy={cy}
+          r={layers[0].r - layers[0].ringWidth / 2}
+          fill="none"
+          stroke={layers[0].color}
+          strokeOpacity={active === 0 ? 1 : 0.32}
+          strokeWidth={layers[0].ringWidth}
+          style={{ transition: "stroke-opacity 500ms ease" }}
+        />
+        {/* OUTER ring outline (always visible, thin) */}
+        <circle cx={cx} cy={cy} r={layers[0].r} fill="none" stroke={layers[0].color} strokeWidth="1.2" strokeOpacity="0.7" />
+        <circle cx={cx} cy={cy} r={layers[0].r - layers[0].ringWidth} fill="none" stroke={layers[0].color} strokeWidth="1.2" strokeOpacity="0.7" />
+
+        {/* INNER ring */}
+        <circle
+          cx={cx} cy={cy}
+          r={layers[1].r - layers[1].ringWidth / 2}
+          fill="none"
+          stroke={layers[1].color}
+          strokeOpacity={active === 1 ? 1 : 0.32}
+          strokeWidth={layers[1].ringWidth}
+          style={{ transition: "stroke-opacity 500ms ease" }}
+        />
+        <circle cx={cx} cy={cy} r={layers[1].r} fill="none" stroke={layers[1].color} strokeWidth="1.2" strokeOpacity="0.7" />
+        <circle cx={cx} cy={cy} r={layers[1].r - layers[1].ringWidth} fill="none" stroke={layers[1].color} strokeWidth="1.2" strokeOpacity="0.7" />
+
+        {/* PITH disc */}
+        <circle
+          cx={cx} cy={cy} r={pithR}
+          fill={layers[2].color}
+          fillOpacity={active === 2 ? 1 : 0.32}
+          stroke={layers[2].color}
+          strokeWidth="1.2"
+          style={{ transition: "fill-opacity 500ms ease" }}
+        />
+
+        {/* center label */}
+        <text x={cx} y={cy - 4} textAnchor="middle" fontFamily="Plus Jakarta Sans" fontSize="9" fontWeight="800" fill="#0e1116" letterSpacing="1">PSEUDOSTEM</text>
+        <text x={cx} y={cy + 9} textAnchor="middle" fontFamily="JetBrains Mono" fontSize="7" letterSpacing="1.4" fill="#5b6470">CROSS-SECTION</text>
+
+        {/* leader lines + labels */}
+        {layers.map((l, i) => {
+          const isActive = i === active;
+          // anchor on the ring's mid radius (or pith mid for last)
+          const midR = l.id === "pith" ? pithR / 2 : l.r - l.ringWidth / 2;
+          const a = (l.labelAngle * Math.PI) / 180;
+          const ax = cx + Math.cos(a) * midR;
+          const ay = cy + Math.sin(a) * midR;
+          // outer leader endpoint
+          const outR = 192;
+          const ex = cx + Math.cos(a) * outR;
+          const ey = cy + Math.sin(a) * outR;
+          const tx = cx + Math.cos(a) * (outR + 6);
+          const ty = cy + Math.sin(a) * (outR + 6);
+          const isLeft = Math.cos(a) < -0.15;
+          const anchor = isLeft ? "end" : (Math.abs(Math.cos(a)) < 0.2 ? "middle" : "start");
+          return (
+            <g key={`ann-${l.id}`} style={{ opacity: isActive ? 1 : 0.32, transition: "opacity 400ms ease" }}>
+              <line x1={ax} y1={ay} x2={ex} y2={ey} stroke={l.color} strokeWidth="1.25" />
+              <circle cx={ax} cy={ay} r={isActive ? 4 : 2.8} fill="#fff" stroke={l.color} strokeWidth="1.6" style={{ transition: "r 400ms ease" }} />
+              <text x={tx} y={ty - 2} textAnchor={anchor} fontFamily="JetBrains Mono" fontSize="8" letterSpacing="1.2" fill="#5b6470">{`L0${i + 1}`}</text>
+              <text x={tx} y={ty + 11} textAnchor={anchor} fontFamily="Plus Jakarta Sans" fontSize="11" fontWeight="700" fill="#0e1116">{l.name}</text>
+              <text x={tx} y={ty + 24} textAnchor={anchor} fontFamily="Plus Jakarta Sans" fontSize="10" fontWeight="600" fill={l.color}>→ {l.product}</text>
+            </g>
+          );
+        })}
+      </svg>
+
+      {/* Info card — sits flush below the SVG inside the panel */}
+      <div style={{
+        marginTop: 12,
+        background: "#ffffff",
+        border: "1px solid var(--rule)",
+        borderRadius: 12,
+        padding: "14px 18px",
+        display: "flex",
+        flexDirection: "column",
+        gap: 8,
+        boxShadow: "0 4px 18px rgba(14,17,22,0.04)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ width: 10, height: 10, borderRadius: 2, background: layers[active].color, boxShadow: `0 0 0 4px ${layers[active].color}22`, flexShrink: 0 }} />
+          <span className="label-mono" style={{ color: "var(--ink-3)" }}>LAYER 0{active + 1} / 03</span>
+          <span style={{ flex: 1 }} />
+          <span style={{ fontFamily: "JetBrains Mono", fontSize: 11, color: "var(--ink-3)" }}>{layers[active].yield}</span>
+        </div>
+        <div style={{ fontWeight: 800, fontSize: 17, color: "var(--ink)", letterSpacing: "-0.01em" }}>
+          {layers[active].name} <span style={{ color: "var(--ink-4)", fontWeight: 600 }}>→</span> <span style={{ color: layers[active].color }}>{layers[active].product}</span>
+        </div>
+        <div className="body-s" style={{ margin: 0, lineHeight: 1.5 }}>{layers[active].desc}</div>
+        <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+          {layers.map((l, i) => (
+            <button
+              key={l.id}
+              onClick={() => { setActive(i); setPaused(true); }}
+              style={{
+                flex: 1, height: 4, borderRadius: 2, border: "none", cursor: "pointer",
+                background: i === active ? l.color : "#e3e6ea",
+                transition: "background 300ms ease",
+                padding: 0,
+              }}
+              aria-label={`Show ${l.name}`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+window.StemCrossSection = StemCrossSection;
+  </script>
+
+  <script type="text/babel" data-presets="react">
+function Hero() {
+  return (
+    <header id="top" style={{ position: "relative", paddingTop: 132, paddingBottom: 72 }}>
+      <div style={{
+        position: "absolute", top: -100, right: -120, width: 520, height: 520,
+        background: "radial-gradient(circle, rgba(24,194,90,0.18) 0%, rgba(24,194,90,0) 60%)",
+        pointerEvents: "none", zIndex: 0,
+      }} />
+
+      <div className="container" style={{ position: "relative", zIndex: 1 }}>
+        <Reveal>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24, flexWrap: "wrap" }}>
+            <span className="chip chip-green"><span className="dot" /> Pilot · Active in Coimbatore</span>
+            <span className="label-mono">Farm to Fashion — trace your thread</span>
+          </div>
+        </Reveal>
+
+        <Reveal delay={120}>
+          <div style={{ display: "grid", gridTemplateColumns: "1.05fr 1fr", gap: 56, alignItems: "stretch" }} className="hero-grid">
+            {/* Left column */}
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 28 }}>
+              <div>
+                <h1 className="display-xl" style={{ margin: 0, maxWidth: "16ch" }}>
+                  Banana waste,<br />
+                  re-engineered into<br />
+                  <span className="green-word">premium</span> materials.
+                </h1>
+                <p className="body-l" style={{ maxWidth: "48ch", marginTop: 28, marginBottom: 0 }}>
+                  LeafTex is a biomaterials platform that converts <strong style={{ color: "var(--ink)" }}>banana pseudostem</strong> — the 120M tons of agricultural waste burned every year — into three commercial-grade outputs: high-tenacity fiber, vegan leather, and an edible film coating that extends produce shelf life by up to 60%.
+                </p>
+                <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap" }}>
+                  <a href="#platform" className="btn btn-green">Explore the platform <span className="arrow">→</span></a>
+                  <a href="#contact" className="btn btn-ghost">Request a sample</a>
+                </div>
+              </div>
+
+              <div style={{ paddingTop: 20, borderTop: "1px solid var(--rule)", display: "flex", gap: 20, flexWrap: "wrap", alignItems: "center" }}>
+                <span className="label-mono">Compliance</span>
+                <div style={{ display: "flex", gap: 14, flexWrap: "wrap", color: "var(--ink-2)", fontSize: 13, fontWeight: 600, alignItems: "center" }}>
+                  <span>REACH</span><span style={{ color: "var(--rule-2)" }}>·</span>
+                  <span>GAP</span><span style={{ color: "var(--rule-2)" }}>·</span>
+                  <span>MRV</span><span style={{ color: "var(--rule-2)" }}>·</span>
+                  <span>Vegan Certified</span><span style={{ color: "var(--rule-2)" }}>·</span>
+                  <span>Food-safe</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right column — animated cross-section */}
+            <div style={{
+              padding: "20px 22px 22px",
+              background: "linear-gradient(180deg, #ffffff 0%, #f6f7f9 100%)",
+              border: "1px solid var(--rule)",
+              borderRadius: 18,
+              display: "flex",
+              flexDirection: "column",
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                <span className="label-mono" style={{ color: "var(--green-ink)", fontWeight: 700 }}>● LIVE — TRIPLE OUTPUT ENGINE</span>
+                <span className="label-mono" style={{ color: "var(--ink-4)" }}>FIG. 01</span>
+              </div>
+              <StemCrossSection />
+            </div>
+          </div>
+        </Reveal>
+
+        {/* Stat strip */}
+        <Reveal delay={300}>
+          <div style={{
+            marginTop: 56,
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 0,
+            background: "var(--bg-2)",
+            border: "1px solid var(--rule)",
+            borderRadius: 16,
+            overflow: "hidden",
+          }} className="hero-stats">
+            {[
+              ["100%", "Pith utilization", "vs. 15–20% industry avg"],
+              ["3×", "Revenue streams", "fiber · leather · coating"],
+              ["40–60%", "Shelf-life uplift", "verified on fresh produce"],
+              ["120M t", "Annual feedstock", "banana waste, globally"],
+            ].map(([k, v, sub], i) => (
+              <div key={v} style={{ padding: "26px 22px", borderRight: i < 3 ? "1px solid var(--rule)" : "none" }}>
+                <div className="display-m" style={{ color: "var(--green-ink)" }}>{k}</div>
+                <div style={{ marginTop: 10, fontWeight: 700, color: "var(--ink)", fontSize: 15 }}>{v}</div>
+                <div className="body-s" style={{ marginTop: 4 }}>{sub}</div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </div>
+
+      <style>{`
+        @media (max-width: 900px) {
+          .hero-grid { grid-template-columns: 1fr !important; gap: 36px !important; }
+          .hero-stats { grid-template-columns: 1fr 1fr !important; }
+          .hero-stats > div:nth-child(2) { border-right: none !important; }
+          .hero-stats > div:nth-child(1), .hero-stats > div:nth-child(2) { border-bottom: 1px solid var(--rule); }
+        }
+        @media (max-width: 540px) {
+          .hero-stats { grid-template-columns: 1fr !important; }
+          .hero-stats > div { border-right: none !important; border-bottom: 1px solid var(--rule); }
+          .hero-stats > div:last-child { border-bottom: none; }
+        }
+      `}</style>
+    </header>
+  );
+}
+
+window.Hero = Hero;
+  </script>
+
+  <script type="text/babel" data-presets="react">
+function Problem() {
+  const stats = [
+    { n: "120", unit: "M", label: "Tons of banana crop waste annually", sub: "Burned or sent to landfill — a primary source of agricultural emissions." },
+    { n: "90", unit: "%", label: "Of animal leather is tanned with toxins", sub: "Chromium and other carcinogens pollute waterways near tanneries." },
+    { n: "33", unit: "%", label: "Of food produced is lost or wasted", sub: "Short shelf-life rots produce before it reaches consumers." },
+  ];
+  return (
+    <section id="problem">
+      <div className="container">
+        <SectionHead
+          code="01 / Problem"
+          label="A dual waste crisis"
+          title={<>Two industries, <span className="green-word">one feedstock</span> — wasted.</>}
+          subtitle="Agriculture and fashion both have waste problems no one is solving in tandem. Banana farmers burn what could be a textile feedstock; fashion brands import synthetics shedding microplastics; cold-chains lose a third of every harvest. We address all three with one platform."
+        />
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }} className="problem-grid">
+          {stats.map((s, i) => (
+            <Reveal key={s.label} delay={i * 120}>
+              <div className="card outline" style={{ height: "100%", borderLeft: "4px solid var(--green)" }}>
+                <div className="stat-num" style={{ color: "var(--ink)" }}>
+                  <Counter to={parseFloat(s.n)} />
+                  <span className="unit">{s.unit}</span>
+                </div>
+                <div style={{ marginTop: 16, fontWeight: 700, color: "var(--ink)", fontSize: 16 }}>
+                  {s.label}
+                </div>
+                <p className="body-s" style={{ marginTop: 8, maxWidth: "32ch" }}>{s.sub}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* The opportunity callout — matches the dark band in the deck */}
+        <Reveal>
+          <div className="card dark" style={{ marginTop: 32, padding: "28px 32px", display: "flex", alignItems: "center", gap: 24, flexWrap: "wrap", borderRadius: 14 }}>
+            <span style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--green)", fontWeight: 700 }}>The opportunity</span>
+            <span style={{ width: 1, alignSelf: "stretch", background: "#2a3038" }} />
+            <span style={{ fontWeight: 600, fontSize: 17, color: "#fff", flex: 1, minWidth: 280 }}>
+              Upcycle banana waste into high-value, sustainable textiles and protective edible coatings.
+            </span>
+          </div>
+        </Reveal>
+      </div>
+
+      <style>{`
+        @media (max-width: 820px) {
+          .problem-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+    </section>
+  );
+}
+
+window.Problem = Problem;
+  </script>
+
+  <script type="text/babel" data-presets="react">
+function Platform() {
+  const products = [
+    {
+      code: "P—01",
+      name: "Banana Fiber",
+      tag: "Degummed & combed",
+      bullets: ["Degummed & combed", "High tensile strength & naturally dyeable", "Ready for modern textile spinners"],
+      spec: [["Tenacity", "29.98 g/tex"], ["Length", "1.5–3.0 m"], ["Moisture", "10–12%"], ["ASP", "$6–10 / kg"]],
+      prompt: "Hero macro of a hank of banana fiber yarn — natural cream tones with subtle green-leaf variegation (matching the existing 'Leaf-Tex' yarn product image). Twisted skein on pale stone surface. Bright daylight, soft shadow, clean white space at top.",
+    },
+    {
+      code: "P—02",
+      name: "Banana Vegan Leather",
+      tag: "Premium · cruelty-free",
+      bullets: ["Premium vegan alternative", "Customizable colorways and grains", "Durable for fashion & accessories"],
+      spec: [["Thickness", "0.8–1.4 mm"], ["Tensile", ">20 MPa"], ["Format", "Sheet & roll"], ["ASP", "$25–45 / sqm"]],
+      prompt: "A swatch card of warm caramel-brown banana leather (matching brand swatches) clipped to clean white card stock. Visible natural grain and slight crease. Top-down studio shot on light grey paper. Crisp, catalog-ready.",
+    },
+    {
+      code: "P—03",
+      name: "Leaf-Guard™ Edible Coating",
+      tag: "Starch-based · transparent",
+      bullets: ["Extracted from banana pith", "Starch-based & completely transparent", "Extends produce shelf-life by 30–60%"],
+      spec: [["Form", "Aqueous spray"], ["Shelf-life Δ", "+40–60%"], ["Approvals", "Food-safe"], ["ASP", "$3–6 / L"]],
+      prompt: "Split-screen comparison shot: 'Day 7 — Uncoated' (slightly wilted strawberries) vs. 'Day 7 — Leaf-Guard coated' (vibrant, glossy strawberries). Glass bowls, clean white kitchen lab background. Matches the existing brand strawberry comparison.",
+    },
+  ];
+
+  return (
+    <section id="platform" style={{ background: "var(--bg-2)" }}>
+      <div className="container">
+        <SectionHead
+          code="02 / Platform"
+          label="Triple value-innovation"
+          title={<>A biomaterials platform — <span className="green-word">not</span> a single product.</>}
+          subtitle="Most bio-material startups bet on one chemistry. We engineered a process where every stratum of the pseudostem becomes a different product — diversifying revenue, hedging market cycles, and pushing utilization to 100%."
+        />
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }} className="platform-grid">
+          {products.map((p, i) => (
+            <Reveal key={p.code} delay={i * 100}>
+              <div className="card outline" style={{ padding: 0, overflow: "hidden", height: "100%", display: "flex", flexDirection: "column" }}>
+                <ImgPlaceholder code={p.code} ratio="16 / 9" prompt={p.prompt} style={{ borderRadius: 0, border: "none", borderBottom: "3px solid var(--green)" }} />
+                <div style={{ padding: 20, display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
+                  <div>
+                    <h3 className="display-s" style={{ margin: 0 }}>{p.name}</h3>
+                    <div style={{ marginTop: 4, color: "var(--green-ink)", fontWeight: 600, fontSize: 13 }}>{p.tag}</div>
+                  </div>
+                  <ul className="check-list" style={{ gap: 8 }}>
+                    {p.bullets.map((b) => <li key={b}>{b}</li>)}
+                  </ul>
+                  <div style={{ marginTop: "auto", paddingTop: 20, borderTop: "1px solid var(--rule)", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    {p.spec.map(([k, v]) => (
+                      <div key={k}>
+                        <div className="label-mono">{k}</div>
+                        <div style={{ fontFamily: "var(--mono)", fontSize: 13, color: "var(--ink)", marginTop: 4, fontWeight: 500 }}>{v}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+      <style>{`
+        @media (max-width: 900px) { .platform-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
+    </section>
+  );
+}
+
+window.Platform = Platform;
+  </script>
+
+  <script type="text/babel" data-presets="react">
+function Products() {
+  const colorways = [
+    { name: "Caramel Brown", hex: "#8B5230", desc: "A warm tobacco tone for heritage accessory lines." },
+    { name: "Chocolate Brown", hex: "#3F2618", desc: "Deep cocoa for outerwear and structured goods." },
+    { name: "Natural Tan Beige", hex: "#C9A37A", desc: "Untreated, neutral — finishes beautifully." },
+    { name: "Cognac Amber", hex: "#A85A1F", desc: "Warm orange-brown for footwear and bags." },
+    { name: "Espresso Black", hex: "#1A1614", desc: "Dense and architectural for premium fashion." },
+  ];
+
+  return (
+    <section id="products">
+      <div className="container">
+        <SectionHead
+          code="03 / Products"
+          label="Material library"
+          title={<>Premium swatches, made <span className="green-word">to spec.</span></>}
+          subtitle="Five stock colorways for our vegan banana leather, with custom matching available. Every swatch is vegan-certified and traceable to a specific FPO cluster — sample kits ship within five business days."
+        />
+
+        <Reveal>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 16 }} className="swatch-grid">
+            {colorways.map((c, i) => (
+              <div key={c.name} className="card outline" style={{ padding: 0, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                <div style={{ aspectRatio: "4/3", background: c.hex, position: "relative" }}>
+                  <div style={{
+                    position: "absolute", top: 12, left: 12, right: 12,
+                    background: "rgba(255,255,255,0.95)", borderRadius: 6,
+                    padding: "8px 10px", display: "flex", alignItems: "baseline", justifyContent: "space-between",
+                  }}>
+                    <Wordmark size={13} />
+                    <span className="label-mono" style={{ fontSize: 9 }}>{(i + 1).toString().padStart(2, "0")} / 05</span>
+                  </div>
+                </div>
+                <div style={{ padding: "12px 16px 14px" }}>
+                  <div style={{ fontWeight: 700, fontSize: 14, color: "var(--ink)" }}>{c.name}</div>
+                  <div className="label-mono" style={{ marginTop: 4 }}>Banana Leather · Vegan Certified</div>
+                  <p className="body-s" style={{ marginTop: 6, marginBottom: 0 }}>{c.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* Leaf-Guard compact callout */}
+        <Reveal>
+          <div style={{
+            marginTop: 20,
+            padding: "18px 28px",
+            border: "1px solid var(--rule)",
+            borderLeft: "4px solid var(--green)",
+            borderRadius: 14,
+            display: "grid",
+            gridTemplateColumns: "auto 1px 1fr auto",
+            alignItems: "center",
+            gap: 24,
+            background: "#fff",
+          }} className="lg-callout">
+            <div style={{ textAlign: "center", minWidth: 80 }}>
+              <div className="display-m" style={{ color: "var(--green-ink)" }}>+60%</div>
+              <div className="label-mono" style={{ marginTop: 4 }}>Shelf life</div>
+            </div>
+            <span style={{ width: 1, alignSelf: "stretch", background: "var(--rule)" }} />
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 15, color: "var(--ink)" }}>
+                Leaf-Guard™ <span style={{ color: "var(--green-ink)" }}>Edible Coating</span>
+              </div>
+              <p className="body-s" style={{ margin: "4px 0 0", maxWidth: "56ch" }}>
+                Starch-based spray from banana pith. +40–60% produce shelf-life. Food-safe, FDA-pathway compliant. Drop-in for existing packhouse equipment.
+              </p>
+            </div>
+            <a href="#contact" className="btn btn-green" style={{ whiteSpace: "nowrap", padding: "10px 18px", fontSize: 13 }}>
+              Start a pilot <span className="arrow">→</span>
+            </a>
+          </div>
+        </Reveal>
+      </div>
+      <style>{`
+        @media (max-width: 1100px) { .swatch-grid { grid-template-columns: repeat(3, 1fr) !important; } }
+        @media (max-width: 720px) { .swatch-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 820px) { .lg-callout { grid-template-columns: 1fr !important; } }
+      `}</style>
+    </section>
+  );
+}
+
+window.Products = Products;
+  </script>
+
+  <script type="text/babel" data-presets="react">
+function Process() {
+  const steps = [
+    { n: "1", t: "Regional Sourcing", d: "Pseudostems collected from FPO partners around Coimbatore, post-harvest. Low-miles raw material." },
+    { n: "2", t: "Fiber Extraction", d: "Mechanical decortication and enzyme degumming pulls premium fiber from outer stems." },
+    { n: "3", t: "Vegan Leather", d: "Inner-stem fibers pressed into leather mats, finished and dyed to brand spec." },
+    { n: "4", t: "Edible Film", d: "Pith starch is formulated into Leaf-Guard™ — a transparent food-safe coating." },
+    { n: "5", t: "Vermicompost", d: "Residual pulp is composted, returning nutrients to source soil." },
+    { n: "6", t: "Back to Farm", d: "Compost delivered free to partner farmers — closing the circular loop." },
+  ];
+  return (
+    <section id="process" style={{ background: "var(--bg-2)" }}>
+      <div className="container">
+        <SectionHead
+          code="04 / Process"
+          label="Circular · Zero-waste"
+          title={<>From farm to fiber to <span className="green-word">soil.</span></>}
+          subtitle="A near-farm processing model that minimizes wet-biomass haulage, keeps margins with the platform, and lifts smallholder farmer income — all while operating zero-waste."
+        />
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1.3fr", gap: 48, alignItems: "start" }} className="proc-grid">
+          <Reveal>
+            <CircleDiagram steps={steps} />
+          </Reveal>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }} className="proc-list">
+            {steps.map((s, i) => (
+              <Reveal key={s.n} delay={i * 80}>
+                <div className="card outline" style={{ height: "100%", display: "flex", flexDirection: "column", gap: 10 }}>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: "50%",
+                    background: "var(--green-soft)", color: "var(--green-ink)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontWeight: 800, fontSize: 16,
+                    border: "1.5px solid var(--green)",
+                  }}>{s.n}</div>
+                  <div style={{ fontWeight: 700, fontSize: 17, color: "var(--ink)" }}>{s.t}</div>
+                  <p className="body-s" style={{ margin: 0 }}>{s.d}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+
+      </div>
+
+      <style>{`
+        @media (max-width: 900px) {
+          .proc-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+        }
+        @media (max-width: 600px) {
+          .proc-list { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+    </section>
+  );
+}
+
+function CircleDiagram({ steps }) {
+  const size = 380;
+  const r = 150;
+  const cx = size / 2;
+  const cy = size / 2;
+  return (
+    <div style={{ position: "relative", width: "100%", maxWidth: size, aspectRatio: "1", margin: "0 auto" }}>
+      <svg viewBox={`0 0 ${size} ${size}`} style={{ width: "100%", height: "100%", position: "absolute", inset: 0 }}>
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#d6dae0" strokeWidth="1.5" strokeDasharray="4 6" />
+        <circle cx={cx} cy={cy} r="62" fill="#0e1116" />
+        <text x={cx} y={cy - 8} textAnchor="middle" fill="#18C25A" fontFamily="JetBrains Mono" fontSize="9" letterSpacing="2">CIRCULAR</text>
+        <text x={cx} y={cy + 10} textAnchor="middle" fill="#fff" fontFamily="Plus Jakarta Sans" fontWeight="800" fontSize="16">Zero-Waste</text>
+        <text x={cx} y={cy + 26} textAnchor="middle" fill="#9aa3ad" fontFamily="Plus Jakarta Sans" fontSize="10">100% Pith Utilization</text>
+        {steps.map((s, i) => {
+          const angle = (i / steps.length) * Math.PI * 2 - Math.PI / 2;
+          const x = cx + Math.cos(angle) * r;
+          const y = cy + Math.sin(angle) * r;
+          return (
+            <g key={s.n}>
+              <circle cx={x} cy={y} r="22" fill="#fff" stroke="#18C25A" strokeWidth="2" />
+              <text x={x} y={y + 5} textAnchor="middle" fill="#0e1116" fontFamily="Plus Jakarta Sans" fontWeight="800" fontSize="14">{s.n}</text>
+              <text x={x} y={y + (Math.sin(angle) >= 0 ? 44 : -32)} textAnchor="middle" fill="#0e1116" fontFamily="Plus Jakarta Sans" fontWeight="700" fontSize="10">{s.t.split(' ')[0]}</text>
+              <text x={x} y={y + (Math.sin(angle) >= 0 ? 56 : -20)} textAnchor="middle" fill="#5b6470" fontFamily="Plus Jakarta Sans" fontSize="9">{s.t.split(' ').slice(1).join(' ')}</text>
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
+window.Process = Process;
+  </script>
+
+  <script type="text/babel" data-presets="react">
+function Traceability() {
+  const [activeStep, setActiveStep] = React.useState(0);
+  const events = [
+    { code: "0x4a…f29c", stage: "FARM", actor: "FPO Cluster · Coimbatore N-7", time: "T+0", note: "Stem received · 218 kg · GPS verified" },
+    { code: "0x8b…2d11", stage: "EXTRACT", actor: "Hub-02 · Pollachi", time: "T+18h", note: "Decortication complete · 11.2% yield" },
+    { code: "0xc7…91aa", stage: "QA", actor: "LeafTex Lab", time: "T+72h", note: "Tenacity 31.2 g/tex · approved" },
+    { code: "0xe2…44b8", stage: "SHIP", actor: "Tirupur Mills · Lot 0042", time: "T+96h", note: "Bale dispatched · weight 480 kg" },
+  ];
+
+  React.useEffect(() => {
+    const id = setInterval(() => setActiveStep((s) => (s + 1) % events.length), 2200);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <section id="traceability">
+      <div className="container">
+        <SectionHead
+          code="05 / Traceability"
+          label="Native blockchain · live"
+          title={<>Every thread tells you <span className="green-word">where</span> it came from.</>}
+          subtitle="LeafTex is a chain-of-custody platform first, a materials company second. Every batch is minted on-chain with origin, lot, and lifecycle data — readable by your QR-scanning customer or your compliance officer."
+        />
+
+        <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 28, alignItems: "stretch" }} className="trace-grid">
+          <Reveal>
+            <div className="card dark" style={{ padding: 0, overflow: "hidden", height: "100%" }}>
+              <div style={{ padding: "16px 24px", borderBottom: "1px solid #1f242c", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div className="label-mono" style={{ color: "var(--green)", fontWeight: 700 }}>● LIVE LEDGER</div>
+                <div className="label-mono" style={{ color: "#9aa3ad" }}>BATCH #LFTX—0042</div>
+              </div>
+              <div style={{ padding: 20, display: "flex", flexDirection: "column", gap: 12 }}>
+                {events.map((e, i) => {
+                  const active = i === activeStep;
+                  const past = i < activeStep;
+                  return (
+                    <div key={e.code} style={{
+                      display: "grid",
+                      gridTemplateColumns: "20px 80px 1fr auto",
+                      gap: 16,
+                      alignItems: "center",
+                      padding: "12px 14px",
+                      borderRadius: 8,
+                      background: active ? "rgba(24,194,90,0.10)" : "transparent",
+                      border: active ? "1px solid rgba(24,194,90,0.55)" : "1px solid transparent",
+                      transition: "all 320ms ease",
+                      opacity: past ? 0.5 : 1,
+                    }}>
+                      <span style={{
+                        width: 8, height: 8, borderRadius: "50%",
+                        background: active ? "var(--green)" : "#3a4250",
+                        boxShadow: active ? "0 0 0 5px rgba(24,194,90,0.22)" : "none",
+                        transition: "all 320ms ease",
+                      }} />
+                      <span className="label-mono" style={{ color: "var(--green)", fontWeight: 700 }}>{e.stage}</span>
+                      <div style={{ fontFamily: "var(--mono)", fontSize: 12, color: "#fff" }}>
+                        {e.actor}
+                        <div style={{ color: "#9aa3ad", marginTop: 2 }}>{e.note}</div>
+                      </div>
+                      <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "#9aa3ad" }}>{e.time}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div style={{ padding: "16px 24px", borderTop: "1px solid #1f242c", display: "flex", justifyContent: "space-between" }}>
+                <span className="label-mono" style={{ color: "#9aa3ad" }}>TX HASH</span>
+                <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "#fff" }}>{events[activeStep].code}</span>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={150}>
+            <div className="col gap-24" style={{ height: "100%" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                {[
+                  ["100%", "Digital traceability"],
+                  ["MRV", "Reporting compliant"],
+                  ["GAP", "Good Ag practices"],
+                  ["LCA", "Cradle-to-gate ready"],
+                ].map(([k, v]) => (
+                  <div key={v} className="card outline" style={{ padding: "20px 18px" }}>
+                    <div className="display-s" style={{ color: "var(--green-ink)" }}>{k}</div>
+                    <div className="label-mono" style={{ marginTop: 8 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="card" style={{ flex: 1 }}>
+                <div className="label-mono" style={{ color: "var(--green-ink)" }}>Why brands ask for this</div>
+                <p className="body" style={{ marginTop: 12, marginBottom: 0 }}>
+                  EU CSRD, the FTC Green Guides, and consumer-facing scope-3 reporting now demand provable origin claims. With LeafTex, your sustainability story is auditable down to a specific farmer cooperative — not a marketing line.
+                </p>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+      <style>{`
+        @media (max-width: 900px) { .trace-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
+    </section>
+  );
+}
+
+window.Traceability = Traceability;
+  </script>
+
+  <script type="text/babel" data-presets="react">
+function Impact() {
+  return (
+    <section id="impact" style={{ background: "var(--bg-2)" }}>
+      <div className="container">
+        <SectionHead
+          code="06 / Impact"
+          label="Circular by design"
+          title={<>Zero waste isn't a feature. It's the <span className="green-word">premise.</span></>}
+          subtitle="Every kilogram of feedstock leaves the system as a product — fiber, leather, coating, or compost. We measure ourselves on what we don't throw away."
+        />
+
+        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 28 }} className="impact-grid">
+          <Reveal>
+            <div className="card outline" style={{ padding: 36 }}>
+              <div className="label-mono">Per ton of pseudostem</div>
+              <h3 className="display-s" style={{ margin: "8px 0 28px" }}>Output, by stratum</h3>
+              <FlowBar items={[
+                { label: "Fiber (outer sheath)", pct: 12, color: "#18C25A" },
+                { label: "Leather mat (inner sheath)", pct: 18, color: "#0c5c2e" },
+                { label: "Edible film starch (pith)", pct: 14, color: "#f0c429" },
+                { label: "Vermicompost (return)", pct: 56, color: "#9aa3ad" },
+              ]} />
+              <div style={{ marginTop: 28, display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16, paddingTop: 24, borderTop: "1px solid var(--rule)" }} className="flow-legend">
+                {[
+                  ["Fiber", "12%", "120 kg / t", "#18C25A"],
+                  ["Leather", "18%", "180 kg / t", "#0c5c2e"],
+                  ["Coating", "14%", "140 L / t", "#f0c429"],
+                  ["Compost", "56%", "→ farms", "#9aa3ad"],
+                ].map(([k, p, v, c]) => (
+                  <div key={k}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <span style={{ width: 8, height: 8, borderRadius: 2, background: c }} />
+                      <div className="label-mono">{k}</div>
+                    </div>
+                    <div className="display-s" style={{ marginTop: 6 }}>{p}</div>
+                    <div className="body-s" style={{ marginTop: 2 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={150}>
+            <div className="col gap-16" style={{ height: "100%" }}>
+              <ImpactCard k="–82%" title="Carbon vs. legacy leather" body="Banana leather production avoids cattle-stage emissions and chrome-tanning effluent." />
+              <ImpactCard k="+₹14k" title="Per-acre farmer income" body="Estimated annual uplift for partner farmers from previously-burned biomass." />
+              <ImpactCard k="0 ml" title="Discharge to landfill" body="Closed-loop water and full pulp valorization across the platform." />
+            </div>
+          </Reveal>
+        </div>
+      </div>
+      <style>{`
+        @media (max-width: 900px) {
+          .impact-grid { grid-template-columns: 1fr !important; }
+          .flow-legend { grid-template-columns: 1fr 1fr !important; }
+        }
+      `}</style>
+    </section>
+  );
+}
+
+function FlowBar({ items }) {
+  return (
+    <div style={{ display: "flex", height: 56, borderRadius: 8, overflow: "hidden", border: "1px solid var(--rule)" }}>
+      {items.map((it, i) => (
+        <div key={it.label} style={{
+          flex: it.pct,
+          background: it.color,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          color: "#fff", fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.06em",
+          borderRight: i < items.length - 1 ? "1px solid #fff" : "none",
+          fontWeight: 600,
+        }}>{it.pct}%</div>
+      ))}
+    </div>
+  );
+}
+
+function ImpactCard({ k, title, body }) {
+  return (
+    <div className="card outline" style={{ flex: 1, display: "flex", flexDirection: "column", gap: 10, justifyContent: "space-between", borderLeft: "4px solid var(--green)" }}>
+      <div className="display-m" style={{ color: "var(--green-ink)" }}>{k}</div>
+      <div>
+        <div style={{ fontWeight: 700, color: "var(--ink)", marginBottom: 6 }}>{title}</div>
+        <p className="body-s" style={{ margin: 0 }}>{body}</p>
+      </div>
+    </div>
+  );
+}
+
+window.Impact = Impact;
+  </script>
+
+  <script type="text/babel" data-presets="react">
+function Team() {
+  const team = [
+    { n: "Frankline Francis", r: "Co-Founder & CEO", b: "20 years business strategy. Former VP, Carbelim Middle East; CEO, Conflexity Consultancy. Leads enterprise sales and strategic alliances.", tag: "BUSINESS" },
+    { n: "Manoj Ramdoss", r: "Co-Founder & COO", b: "15-year mechanical engineer (Pandian Industries, SNR Laser). Leads plant setup, machinery design, and production scale-up.", tag: "OPERATIONS" },
+    { n: "Hitesh Gupta", r: "Co-Founder & CTO", b: "NIT alumnus. Deep expertise in blockchain and digital systems with 20+ launches. Owns the traceability platform and ESG dashboards.", tag: "TECHNOLOGY" },
+    { n: "Susheela Bai Gopi", r: "Co-Founder & Head of Sourcing", b: "Organic farmer, community leader, vegan and animal-rights activist. Co-Founder of Animal House. Leads farmer engagement.", tag: "FARMER PARTNERSHIPS" },
+    { n: "Dr. Shijo Joy, Ph.D.", r: "Co-Founder & CSO", b: "PhD, Environmental Science. 4+ years bio-based materials R&D. Leads validation and sustainability reporting.", tag: "SCIENCE" },
+  ];
+  return (
+    <section id="team">
+      <div className="container">
+        <SectionHead
+          code="07 / Team"
+          label="Five founders, one stack"
+          title={<>The people <span className="green-word">behind</span> the thread.</>}
+          subtitle="Strategy, operations, technology, sourcing, and science — under one roof, with deep regional roots in Coimbatore's banana belt."
+        />
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
+          {team.map((p, i) => (
+            <Reveal key={p.n} delay={i * 80}>
+              <div className="card outline" style={{ padding: 0, overflow: "hidden", height: "100%", display: "flex", flexDirection: "column" }}>
+                <ImgPlaceholder
+                  code={`PORTRAIT / ${(i + 1).toString().padStart(2, "0")}`}
+                  ratio="3 / 2"
+                  prompt={`Editorial portrait of ${p.n.split(',')[0]} (${p.r}). Soft natural light, neutral studio background, hint of green wardrobe accent. Confident but warm expression. Clean, modern, like a tech-company team page.`}
+                  style={{ borderRadius: 0, border: "none", borderBottom: "1px solid var(--rule)" }}
+                />
+                <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
+                  <div className="label-mono" style={{ color: "var(--green-ink)" }}>{p.tag}</div>
+                  <div>
+                    <div style={{ fontWeight: 800, fontSize: 18, color: "var(--ink)", letterSpacing: "-0.01em" }}>{p.n}</div>
+                    <div className="body-s" style={{ marginTop: 2 }}>{p.r}</div>
+                  </div>
+                  <p className="body-s" style={{ margin: 0 }}>{p.b}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+window.Team = Team;
+  </script>
+
+  <script type="text/babel" data-presets="react">
+function Footer() {
+  return (
+    <footer id="contact" style={{ background: "var(--dark)", color: "#fff", paddingTop: 100, paddingBottom: 40 }}>
+      <div className="brand-strip" />
+      <div className="container" style={{ paddingTop: 40 }}>
+        <Reveal>
+          <h2 className="display-xl" style={{ margin: 0, color: "#fff", maxWidth: "14ch" }}>
+            Trace your<br />
+            <span className="green-word">thread.</span>
+          </h2>
+        </Reveal>
+
+        <div style={{ marginTop: 56, display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1fr", gap: 40, paddingTop: 40, borderTop: "1px solid #1f242c" }} className="ftr-grid">
+          <div>
+            <div className="label-mono" style={{ color: "var(--green)", fontWeight: 700 }}>Partner with us</div>
+            <p className="body-l" style={{ color: "#c9d3dc", marginTop: 14, maxWidth: "36ch" }}>
+              Sample kits available for spinners, brands, packhouses, and packagers. We'll send you a swatch book within five business days.
+            </p>
+            <a href="mailto:founders@leaftex.bio" className="btn btn-green" style={{ marginTop: 20 }}>
+              Request a sample <span className="arrow">→</span>
+            </a>
+          </div>
+
+          <FtrCol title="Materials" items={["Banana Fiber", "Banana Leather", "Leaf-Guard™ Coating", "Sample Library"]} />
+          <FtrCol title="Platform" items={["Traceability", "ESG Dashboard", "Compliance Reports", "LCA Data Room"]} />
+          <FtrCol title="Company" items={["Founders' Note", "Press Kit", "Careers", "Contact"]} />
+        </div>
+
+        <div style={{ marginTop: 80, paddingTop: 24, borderTop: "1px solid #1f242c", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
+          <Wordmark size={20} dark />
+          <div style={{ display: "flex", gap: 24, fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color: "#9aa3ad", flexWrap: "wrap" }}>
+            <a href="mailto:founders@leaftex.bio" style={{ textDecoration: "none", color: "inherit" }}>founders@leaftex.bio</a>
+            <a href="tel:+919353142107" style={{ textDecoration: "none", color: "inherit" }}>+91 93531 42107</a>
+            <span>www.leaftex.bio</span>
+          </div>
+        </div>
+
+        <div style={{ marginTop: 28, fontFamily: "var(--mono)", fontSize: 10, color: "#5b6470", letterSpacing: "0.08em" }}>
+          © 2026 LEAFTEX BIO PVT LTD · ALL RIGHTS RESERVED · MADE IN COIMBATORE
+        </div>
+      </div>
+      <style>{`
+        @media (max-width: 900px) { .ftr-grid { grid-template-columns: 1fr 1fr !important; gap: 32px !important; } }
+        @media (max-width: 600px) { .ftr-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
+    </footer>
+  );
+}
+
+function FtrCol({ title, items }) {
+  return (
+    <div>
+      <div className="label-mono" style={{ color: "var(--green)", fontWeight: 700 }}>{title}</div>
+      <ul style={{ listStyle: "none", padding: 0, margin: "16px 0 0", display: "flex", flexDirection: "column", gap: 10 }}>
+        {items.map((it) => (
+          <li key={it}>
+            <a href="#" style={{ color: "#c9d3dc", textDecoration: "none", fontSize: 14 }}>{it}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+window.Footer = Footer;
+  </script>
+
+  <script type="text/babel" data-presets="react">
+function SideRail() {
+  const [active, setActive] = React.useState("top");
+  React.useEffect(() => {
+    const ids = ["top", "problem", "platform", "products", "process", "traceability", "impact", "team", "contact"];
+    const onScroll = () => {
+      let cur = "top";
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.4) cur = id;
+      }
+      setActive(cur);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  const items = [
+    ["00", "Intro", "top"],
+    ["01", "Problem", "problem"],
+    ["02", "Platform", "platform"],
+    ["03", "Products", "products"],
+    ["04", "Process", "process"],
+    ["05", "Trace", "traceability"],
+    ["06", "Impact", "impact"],
+    ["07", "Team", "team"],
+  ];
+  return (
+    <div className="side-rail">
+      {items.map(([n, label, id]) => (
+        <a key={id} href={`#${id}`} className={active === id ? "active" : ""}>
+          <span style={{ minWidth: 18 }}>{n}</span>
+          <span>{label}</span>
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function Marquee() {
+  const items = [
+    "Farm to Fashion",
+    "Trace your thread",
+    "100% pith utilization",
+    "Native blockchain",
+    "Made in Coimbatore",
+    "Zero waste",
+    "Biomaterials platform",
+  ];
+  const all = [...items, ...items, ...items];
+  return (
+    <div style={{ background: "var(--green)", color: "#fff", overflow: "hidden", padding: "16px 0" }}>
+      <div className="marquee">
+        {all.map((t, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 28, paddingRight: 28 }}>
+            <span style={{ fontFamily: "var(--display)", fontSize: 22, fontWeight: 800, whiteSpace: "nowrap", letterSpacing: "-0.02em" }}>{t}</span>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#fff" }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <>
+      <Nav />
+      <SideRail />
+      <Hero />
+      <Marquee />
+      <Problem />
+      <Platform />
+      <Products />
+      <Process />
+      <Traceability />
+      <Impact />
+      <Team />
+      <Footer />
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+  </script>
+</body>
+</html>
