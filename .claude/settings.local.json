@@ -7,7 +7,8 @@
       "Bash(unzip -o \"e:/LeafTex/lt_leafTex_LandingPage/updates/Leaftex.zip\" -d \"/tmp/leaftex_updates\")",
       "Read(//tmp/leaftex_updates/**)",
       "Bash(cp \"/tmp/leaftex_updates/components/Hero.jsx\" \"e:/LeafTex/lt_leafTex_LandingPage/components/Hero.jsx\")",
-      "Bash(cp \"/tmp/leaftex_updates/components/StemCrossSection.jsx\" \"e:/LeafTex/lt_leafTex_LandingPage/components/StemCrossSection.jsx\")"
+      "Bash(cp \"/tmp/leaftex_updates/components/StemCrossSection.jsx\" \"e:/LeafTex/lt_leafTex_LandingPage/components/StemCrossSection.jsx\")",
+      "Bash(git push *)"
     ]
   }
 }
