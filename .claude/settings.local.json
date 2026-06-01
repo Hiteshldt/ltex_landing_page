@@ -8,7 +8,42 @@
       "Read(//tmp/leaftex_updates/**)",
       "Bash(cp \"/tmp/leaftex_updates/components/Hero.jsx\" \"e:/LeafTex/lt_leafTex_LandingPage/components/Hero.jsx\")",
       "Bash(cp \"/tmp/leaftex_updates/components/StemCrossSection.jsx\" \"e:/LeafTex/lt_leafTex_LandingPage/components/StemCrossSection.jsx\")",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(npm run *)",
+      "Bash(node -e \"console.log\\('resend', require\\('resend/package.json'\\).version\\)\")",
+      "Bash(ls -la .gitignore)",
+      "Bash(head -40 .gitignore)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost:3210__TRACKED_VAR__)",
+      "Bash(curl -s http://localhost:3210/)",
+      "Bash(curl -s http://localhost:3210/products/fibers)",
+      "Bash(grep -o '\\\\$[0-9]')",
+      "Bash(curl -s http://localhost:3210/robots.txt)",
+      "Bash(curl -s http://localhost:3210/sitemap.xml)",
+      "Bash(grep -oE '\\(/ ?kg|/ ?sqm|ASP|\\\\$[0-9]+[–-][0-9]+\\)')",
+      "Bash(grep -oE '.\\\\$[0-9].')",
+      "Bash(grep -oE '\\(/ ?kg|ASP|\\\\$[0-9]+[–-][0-9]+\\)')",
+      "Bash(pkill -f \"next start\")",
+      "Bash(pkill -f \"next-server\")",
+      "Bash(cp updated_images/leaftex_banana_fiber.png public/fiber.png)",
+      "Bash(cp updated_images/leaftex_algae_fiber.png public/algae-fiber.png)",
+      "Bash(cp updated_images/leaftex_caramel_brown.png public/CaramelBrown.png)",
+      "Bash(cp updated_images/leaftex_cognac_amber.png public/Amber.png)",
+      "Bash(cp updated_images/leaftex_chocolate_brown.png public/ChocolateBrown.png)",
+      "Bash(sips -Z 512 updated_images/favicon_raw_png.png --out /tmp/fav_small.png)",
+      "Read(//tmp/**)",
+      "Bash(sips -p 512 512 --padColor FFFFFF /tmp/fav_small.png --out /tmp/fav_sq.png)",
+      "Bash(cd \"/Users/hiteshgupta/Vs Code/leaftex/ltex_landing_page\" && cp /tmp/fav_sq.png src/app/icon.png && file -b src/app/icon.png)",
+      "Bash(curl -s http://localhost:3211/)",
+      "Bash(git rm *)",
+      "Bash(mkdir -p layout sections ui)",
+      "Bash(mv Nav.jsx Footer.jsx layout/)",
+      "Bash(mv Hero.jsx Marquee.jsx Problem.jsx Advantage.jsx Platform.jsx Products.jsx Process.jsx Traceability.jsx Impact.jsx FAQ.jsx Team.jsx sections/)",
+      "Bash(mv Primitives.jsx PageIntro.jsx StemCrossSection.jsx ContactForm.jsx JsonLd.jsx ui/)",
+      "Bash(grep -v -E 'node_modules|^\\\\.next|^\\\\.git$')",
+      "Bash(grep -vE 'node_modules|^\\\\.next$')"
+    ],
+    "additionalDirectories": [
+      "/private/tmp"
     ]
   }
 }
