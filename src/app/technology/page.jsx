@@ -26,8 +26,8 @@ export default function TechnologyPage() {
       <JsonLd data={breadcrumbLd} />
       <PageIntro
         eyebrow="Technology"
-        title={<>From grower to fiber <span className="green-word">to soil.</span></>}
-        intro="A modular, regional processing platform that minimizes wet-biomass haulage, keeps margins in-house, and lifts smallholder income — paired with a native blockchain that makes every batch auditable from farm gate to finished product."
+        title={<>How LeafTex <span className="green-word">works.</span></>}
+        intro="Two systems power the platform: a zero-waste regional processing model that turns crop and marine waste into finished product, and a native blockchain that proves where every batch came from."
         primary={{ href: "/contact", label: "Partner with us" }}
         secondary={{ href: "/products", label: "See the materials" }}
       />

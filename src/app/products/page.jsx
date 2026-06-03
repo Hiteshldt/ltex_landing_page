@@ -46,7 +46,7 @@ export default function ProductsPage() {
       <JsonLd data={breadcrumbLd} />
       <PageIntro
         eyebrow="Products"
-        title={<>Premium materials, made <span className="green-word">to spec.</span></>}
+        title={<>Explore our <span className="green-word">materials.</span></>}
         intro="Three product lines from one zero-waste platform — all traceable to source. Sample kits ship within five business days."
         primary={{ href: "/contact", label: "Request a sample" }}
         secondary={{ href: "/contact", label: "Request pricing" }}

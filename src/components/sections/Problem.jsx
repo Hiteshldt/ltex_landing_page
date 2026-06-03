@@ -24,7 +24,7 @@ export default function Problem() {
     <section id="problem">
       <div className="container">
         <SectionHead
-          code="01 / Problem"
+          code="Problem"
           label="A multi-waste crisis"
           title={<>Three industries, <span className="green-word">one feedstock</span> — upcycled.</>}
           subtitle="Agriculture, marine cultivation, and fashion all have waste problems no one is solving in tandem. Cultivators burn or discard banana stems and pineapple leaves, while algae blooms clog marine ecosystems. We upcycle all three under one materials platform."

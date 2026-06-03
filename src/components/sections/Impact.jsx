@@ -40,7 +40,7 @@ export default function Impact() {
     <section id="impact" style={{ background: "var(--bg-2)" }}>
       <div className="container">
         <SectionHead
-          code="06 / Impact"
+          code="Impact"
           label="Circular by design"
           title={<>Zero waste isn&apos;t a feature. It&apos;s the <span className="green-word">premise.</span></>}
           subtitle="Every kilogram of feedstock leaves the system as a product — fiber, leather, coating, or compost. We measure ourselves on what we don't throw away."

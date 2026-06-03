@@ -27,7 +27,7 @@ export default function AboutPage() {
       <JsonLd data={breadcrumbLd} />
       <PageIntro
         eyebrow="About Us"
-        title={<>Zero waste isn&apos;t a feature. It&apos;s the <span className="green-word">premise.</span></>}
+        title={<>The company behind the <span className="green-word">thread.</span></>}
         intro="LeafTex is a biomaterials platform with deep roots in Southern India's agricultural and coastal belts. We exist to prove that the world's most abundant waste streams can become its most valuable materials — measured not by what we make, but by what we refuse to throw away."
         primary={{ href: "/contact", label: "Partner with us" }}
         secondary={{ href: "/technology", label: "How it works" }}

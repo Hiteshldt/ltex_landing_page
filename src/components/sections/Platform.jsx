@@ -49,7 +49,7 @@ export default function Platform() {
     <section id="platform" style={{ background: "var(--bg-2)" }}>
       <div className="container">
         <SectionHead
-          code="02 / Platform"
+          code="Platform"
           label="Triple fiber innovation"
           title={<>A biomaterials platform — <span className="green-word">three</span> sustainable fibers.</>}
           subtitle="Most bio-material startups bet on one chemistry or feedstock. We engineered a platform that upcycles agricultural and marine wastes—banana stems, pineapple leaves, and seaweed—into commercial-grade sustainable fibers to completely replace synthetics."

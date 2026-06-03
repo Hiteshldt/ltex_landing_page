@@ -367,15 +367,13 @@ html {
   scroll-padding-top: 72px;
 }
 
-section,
-header#top {
+section {
   padding-top: 72px !important;
-  padding-bottom: 36px !important;
+  padding-bottom: 72px !important;
 }
-
-footer#contact {
-  padding-top: 80px !important;
-  padding-bottom: 32px !important;
+header#top {
+  padding-top: 120px !important;
+  padding-bottom: 56px !important;
 }
 
 header#top .hero-grid > div:last-child svg {
@@ -397,10 +395,8 @@ header#top .hero-stats > div { padding: 14px 18px !important; }
 .section-head { margin-bottom: 22px; }
 
 @media (max-width: 900px) {
-  section, header#top, footer#contact {
-    padding-top: 64px !important;
-    padding-bottom: 32px !important;
-  }
+  section { padding-top: 56px !important; padding-bottom: 56px !important; }
+  header#top { padding-top: 100px !important; padding-bottom: 40px !important; }
   header#top .hero-grid > div:last-child svg { height: 200px; }
 }
 

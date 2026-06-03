@@ -14,7 +14,7 @@ export default function Team() {
     <section id="team">
       <div className="container">
         <SectionHead
-          code="07 / Team"
+          code="Team"
           label="Five founders, one stack"
           title={<>The people <span className="green-word">behind</span> the thread.</>}
           subtitle="Strategy, operations, technology, sourcing, and science — under one roof, with deep regional roots in Southern India's agricultural and coastal belts."

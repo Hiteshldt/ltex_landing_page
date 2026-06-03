@@ -45,7 +45,7 @@ export default function Products() {
     <section id="products">
       <div className="container">
         <SectionHead
-          code="03 / Products"
+          code="Products"
           label="Material library"
           title={<>Premium materials, made <span className="green-word">to spec.</span></>}
           subtitle="Banana, pineapple, and algae fibers, plus premium vegan leathers — all traceable to source. Every swatch ships with full chain-of-custody data. Sample kits ship within five business days."

@@ -46,7 +46,7 @@ export default function Process() {
     <section id="process" style={{ background: "var(--bg-2)" }}>
       <div className="container">
         <SectionHead
-          code="04 / Process"
+          code="Process"
           label="Circular · Zero-waste"
           title={<>From grower to fiber to <span className="green-word">soil.</span></>}
           subtitle="A regional processing model that minimizes wet-biomass haulage, keeps margins with the platform, and lifts smallholder cultivator income — all while operating zero-waste."

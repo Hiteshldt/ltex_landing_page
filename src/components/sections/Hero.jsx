@@ -24,7 +24,7 @@ export default function Hero() {
 
         <Reveal delay={120}>
           <div
-            style={{ display: "grid", gridTemplateColumns: "1.05fr 1fr", gap: 56, alignItems: "start" }}
+            style={{ display: "grid", gridTemplateColumns: "1.05fr 1fr", gap: 56, alignItems: "center" }}
             className="hero-grid"
           >
             {/* Left column */}

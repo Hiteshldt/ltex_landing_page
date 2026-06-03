@@ -20,7 +20,7 @@ export default function Traceability() {
     <section id="traceability">
       <div className="container">
         <SectionHead
-          code="05 / Traceability"
+          code="Traceability"
           label="Native blockchain · live"
           title={<>Every thread tells you <span className="green-word">where</span> it came from.</>}
           subtitle="LeafTex is a chain-of-custody platform first, a materials company second. Every batch is minted on-chain with origin, lot, and lifecycle data — readable by your QR-scanning customer or your sourcing team."

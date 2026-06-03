@@ -28,7 +28,7 @@ export default function FAQ() {
           label="Common questions answered"
           title={<>Frequently asked <span className="green-word">questions.</span></>}
         />
-        <div style={{ maxWidth: 880 }}>
+        <div>
           {faqData.map((item) => (
             <details key={item.q} className="faq-item">
               <summary>

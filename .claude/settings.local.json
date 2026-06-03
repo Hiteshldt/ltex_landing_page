@@ -40,7 +40,12 @@
       "Bash(mv Hero.jsx Marquee.jsx Problem.jsx Advantage.jsx Platform.jsx Products.jsx Process.jsx Traceability.jsx Impact.jsx FAQ.jsx Team.jsx sections/)",
       "Bash(mv Primitives.jsx PageIntro.jsx StemCrossSection.jsx ContactForm.jsx JsonLd.jsx ui/)",
       "Bash(grep -v -E 'node_modules|^\\\\.next|^\\\\.git$')",
-      "Bash(grep -vE 'node_modules|^\\\\.next$')"
+      "Bash(grep -vE 'node_modules|^\\\\.next$')",
+      "Bash(pkill -f \"next\")",
+      "Bash(rm -rf .next)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000__TRACKED_VAR__)",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(curl -s -X POST http://localhost:3000/api/contact -H 'Content-Type: application/json' -d '{\"name\":\"Check\",\"email\":\"a@b.com\",\"message\":\"runtime test\"}' -w \"  [HTTP %{http_code}]\\\\n\")"
     ],
     "additionalDirectories": [
       "/private/tmp"
