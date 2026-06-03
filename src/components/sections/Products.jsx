@@ -22,15 +22,6 @@ export default function Products() {
       specs: [["Fineness", "~3–5 µm"], ["Length", "60–120 cm"], ["Lustre", "High"]],
       desc: "Extracted from pineapple leaf waste. Silky lustre and fine hand — ideal for luxury textiles and nonwovens.",
     },
-    {
-      name: "Algae Fiber",
-      bg: "linear-gradient(135deg, #b5d5c5 0%, #7aae8e 100%)",
-      src: "/algae-fiber.png",
-      accent: "#0c5c2e",
-      tag: "Seaweed-based · Marine",
-      specs: [["Source", "Macro-algae"], ["Property", "Anti-microbial"], ["Form", "Filament / staple"]],
-      desc: "Marine biomass upcycled into functional fiber. Natural anti-microbial properties — suited for performance and medical textiles.",
-    },
   ];
 
   const colorways = [
@@ -48,7 +39,7 @@ export default function Products() {
           code="Products"
           label="Material library"
           title={<>Premium materials, made <span className="green-word">to spec.</span></>}
-          subtitle="Banana, pineapple, and algae fibers, plus premium vegan leathers — all traceable to source. Every swatch ships with full chain-of-custody data. Sample kits ship within five business days."
+          subtitle="Banana and pineapple fibers, plus vegan and algae leathers — all traceable to source. Every swatch ships with full chain-of-custody data. Sample kits ship within five business days."
         />
 
         {/* Fiber types */}
@@ -56,19 +47,19 @@ export default function Products() {
           <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 14 }}>
             <span className="label-mono" style={{ color: "var(--green-ink)", fontWeight: 700 }}>Fiber types</span>
             <span style={{ flex: 1, height: 1, background: "var(--rule)" }} />
-            <span className="label-mono">03 variants</span>
+            <span className="label-mono">02 variants</span>
           </div>
         </Reveal>
 
         <Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 32 }} className="fiber-grid">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16, marginBottom: 32 }} className="fiber-grid">
             {fibers.map((f, i) => (
               <div key={f.name} className="card outline" style={{ padding: 0, overflow: "hidden", display: "flex", flexDirection: "column" }}>
                 <div style={{ aspectRatio: "4/3", background: f.bg, position: "relative", overflow: "hidden" }}>
                   {f.src && <img src={f.src} alt={f.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />}
                   <div style={{ position: "absolute", top: 12, left: 12, right: 12, background: "rgba(255,255,255,0.95)", borderRadius: 6, padding: "8px 10px", display: "flex", alignItems: "baseline", justifyContent: "space-between", zIndex: 2 }}>
                     <Wordmark size={13} />
-                    <span className="label-mono" style={{ fontSize: 9 }}>F{(i + 1).toString().padStart(2, "0")} / 03</span>
+                    <span className="label-mono" style={{ fontSize: 9 }}>F{(i + 1).toString().padStart(2, "0")} / 02</span>
                   </div>
                   <div style={{ position: "absolute", bottom: 12, left: 12, background: f.accent, borderRadius: 999, padding: "4px 10px", fontFamily: "var(--mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", fontWeight: 600, zIndex: 2 }}>
                     Natural Fiber
@@ -124,9 +115,31 @@ export default function Products() {
           </div>
         </Reveal>
 
-        {/* Leaf-Guard callout */}
+        {/* Algae Leather callout */}
         <Reveal>
           <div style={{ marginTop: 20, padding: "18px 28px", border: "1px solid var(--rule)", borderLeft: "4px solid var(--green)", borderRadius: 14, display: "grid", gridTemplateColumns: "auto 1px 1fr auto", alignItems: "center", gap: 24, background: "#fff" }} className="lg-callout">
+            <div style={{ textAlign: "center", minWidth: 80 }}>
+              <div className="display-m" style={{ color: "var(--green-ink)" }}>100%</div>
+              <div className="label-mono" style={{ marginTop: 4 }}>Biodegradable</div>
+            </div>
+            <span style={{ width: 1, alignSelf: "stretch", background: "var(--rule)" }} />
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 15, color: "var(--ink)" }}>
+                Algae <span style={{ color: "var(--green-ink)" }}>Leather</span>
+              </div>
+              <p className="body-s" style={{ margin: "4px 0 0", maxWidth: "56ch" }}>
+                Supple marine vegan leather cast from responsibly-harvested macro-algae. Naturally anti-microbial and flame-retardant.
+              </p>
+            </div>
+            <Link href="/products/algae-leather" className="btn btn-ghost" style={{ whiteSpace: "nowrap", padding: "10px 18px", fontSize: 13 }}>
+              View details <span className="arrow">→</span>
+            </Link>
+          </div>
+        </Reveal>
+
+        {/* Leaf-Guard callout */}
+        <Reveal>
+          <div style={{ marginTop: 16, padding: "18px 28px", border: "1px solid var(--rule)", borderLeft: "4px solid var(--green)", borderRadius: 14, display: "grid", gridTemplateColumns: "auto 1px 1fr auto", alignItems: "center", gap: 24, background: "#fff" }} className="lg-callout">
             <div style={{ textAlign: "center", minWidth: 80 }}>
               <div className="display-m" style={{ color: "var(--green-ink)" }}>+60%</div>
               <div className="label-mono" style={{ marginTop: 4 }}>Shelf life</div>

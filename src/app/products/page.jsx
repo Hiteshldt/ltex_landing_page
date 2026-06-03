@@ -4,24 +4,30 @@ import Products from "@/components/sections/Products";
 import JsonLd from "@/components/ui/JsonLd";
 
 export const metadata = {
-  title: "Products — Fibers, Vegan Leather & Leaf-Guard™ Coating",
+  title: "Products — Fibers, Vegan & Algae Leather, Leaf-Guard™ Coating",
   description:
-    "Explore LeafTex's three product lines: high-tenacity banana, pineapple and algae fibers; premium vegan leather in five colorways; and Leaf-Guard™ edible coating. Traceable to source.",
+    "Explore LeafTex's product lines: high-tenacity banana & pineapple fibers; premium vegan leather in five colorways; biodegradable algae leather; and Leaf-Guard™ edible coating. Traceable to source.",
   alternates: { canonical: "/products" },
 };
 
 const LINES = [
   {
     href: "/products/fibers",
-    name: "Banana, Pineapple & Algae Fibers",
+    name: "Banana & Pineapple Fibers",
     tag: "Natural fiber",
-    desc: "High-tenacity, naturally dyeable fibers upcycled from agricultural and marine waste — spinner-ready for modern textiles.",
+    desc: "High-tenacity, naturally dyeable fibers upcycled from banana pseudostem and pineapple leaf — spinner-ready for modern textiles.",
   },
   {
     href: "/products/vegan-leather",
     name: "Vegan Leather",
     tag: "Cruelty-free",
     desc: "Premium, customizable vegan leather in five colorways — durable for fashion, footwear, and accessories.",
+  },
+  {
+    href: "/products/algae-leather",
+    name: "Algae Leather",
+    tag: "Marine · biodegradable",
+    desc: "A supple, fully biodegradable leather cast from responsibly-harvested macro-algae — naturally anti-microbial and flame-retardant.",
   },
   {
     href: "/products/leaf-guard",
@@ -47,14 +53,14 @@ export default function ProductsPage() {
       <PageIntro
         eyebrow="Products"
         title={<>Explore our <span className="green-word">materials.</span></>}
-        intro="Three product lines from one zero-waste platform — all traceable to source. Sample kits ship within five business days."
+        intro="Four product lines from one zero-waste platform — all traceable to source. Sample kits ship within five business days."
         primary={{ href: "/contact", label: "Request a sample" }}
         secondary={{ href: "/contact", label: "Request pricing" }}
       />
 
       <section style={{ paddingTop: 24 }}>
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }} className="lines-grid">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }} className="lines-grid">
             {LINES.map((l) => (
               <Link key={l.href} href={l.href} className="card outline" style={{ textDecoration: "none", display: "flex", flexDirection: "column", gap: 10, height: "100%" }}>
                 <div className="label-mono" style={{ color: "var(--green-ink)", fontWeight: 700 }}>{l.tag}</div>

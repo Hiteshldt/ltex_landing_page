@@ -7,6 +7,7 @@ export default function sitemap() {
     ["/products", 0.9],
     ["/products/fibers", 0.8],
     ["/products/vegan-leather", 0.8],
+    ["/products/algae-leather", 0.8],
     ["/products/leaf-guard", 0.8],
     ["/technology", 0.7],
     ["/about", 0.6],

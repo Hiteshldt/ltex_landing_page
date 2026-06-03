@@ -19,7 +19,7 @@ export const metadata = {
   keywords: [
     "banana fiber",
     "pineapple fiber",
-    "algae fiber",
+    "algae leather",
     "vegan leather",
     "sustainable textiles",
     "biomaterials platform",

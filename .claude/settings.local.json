@@ -45,7 +45,10 @@
       "Bash(rm -rf .next)",
       "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000__TRACKED_VAR__)",
       "Bash(curl -s http://localhost:3000/)",
-      "Bash(curl -s -X POST http://localhost:3000/api/contact -H 'Content-Type: application/json' -d '{\"name\":\"Check\",\"email\":\"a@b.com\",\"message\":\"runtime test\"}' -w \"  [HTTP %{http_code}]\\\\n\")"
+      "Bash(curl -s -X POST http://localhost:3000/api/contact -H 'Content-Type: application/json' -d '{\"name\":\"Check\",\"email\":\"a@b.com\",\"message\":\"runtime test\"}' -w \"  [HTTP %{http_code}]\\\\n\")",
+      "Bash(git mv *)",
+      "Bash(mv public/leaftex_Algae_leather.png public/algae-leather.png)",
+      "Bash(rm -f public/algae-fiber.png)"
     ],
     "additionalDirectories": [
       "/private/tmp"

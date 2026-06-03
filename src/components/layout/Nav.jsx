@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { Wordmark } from "@/components/ui/Primitives";
 
 const PRODUCTS = [
-  ["Banana, Pineapple & Algae Fibers", "/products/fibers"],
+  ["Banana & Pineapple Fibers", "/products/fibers"],
   ["Vegan Leather", "/products/vegan-leather"],
+  ["Algae Leather", "/products/algae-leather"],
   ["Leaf-Guard™ Coating", "/products/leaf-guard"],
 ];
 

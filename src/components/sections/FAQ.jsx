@@ -7,7 +7,7 @@ export const faqData = [
   },
   {
     q: "What products do you make, and how are they related?",
-    a: "One integrated platform yields three commercial outputs: high-tenacity natural fibers (banana, pineapple, algae), premium cruelty-free vegan leather, and Leaf-Guard™, a starch-based edible coating that extends produce shelf-life by 40–60%. Diversifying outputs hedges market cycles and pushes feedstock utilization to 100%.",
+    a: "One integrated platform yields several commercial outputs: high-tenacity natural fibers (banana, pineapple), premium cruelty-free leathers — vegan leather plus biodegradable algae leather — and Leaf-Guard™, a starch-based edible coating that extends produce shelf-life by 40–60%. Diversifying outputs hedges market cycles and pushes feedstock utilization to 100%.",
   },
   {
     q: "How does blockchain traceability work?",

@@ -51,7 +51,7 @@ export default function Footer() {
           </div>
 
           <FtrCol title="Company" items={[["Home", "/"], ["Technology", "/technology"], ["About Us", "/about"]]} />
-          <FtrCol title="Products" items={[["Banana, Pineapple & Algae Fibers", "/products/fibers"], ["Vegan Leather", "/products/vegan-leather"], ["Leaf-Guard™ Coating", "/products/leaf-guard"]]} />
+          <FtrCol title="Products" items={[["Banana & Pineapple Fibers", "/products/fibers"], ["Vegan Leather", "/products/vegan-leather"], ["Algae Leather", "/products/algae-leather"], ["Leaf-Guard™ Coating", "/products/leaf-guard"]]} />
           <FtrCol title="Resources" items={[["Traceability", "/technology"], ["Request a Sample", "/contact"], ["Privacy Policy", "/contact"]]} />
         </div>
 

@@ -52,7 +52,7 @@ export default function Impact() {
               <div className="label-mono">Platform resource yield</div>
               <h3 className="display-s" style={{ margin: "8px 0 28px" }}>Output by material type</h3>
               <FlowBar items={[
-                { label: "Premium Fibers (Banana, Pineapple, Algae)", pct: 40, color: "#18C25A" },
+                { label: "Premium Fibers (Banana, Pineapple)", pct: 40, color: "#18C25A" },
                 { label: "Vegan Leathers", pct: 20, color: "#0c5c2e" },
                 { label: "Edible Coatings", pct: 15, color: "#f0c429" },
                 { label: "Vermicompost returned to soil", pct: 25, color: "#9aa3ad" },
