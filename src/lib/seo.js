@@ -1,5 +1,6 @@
 // Shared SEO helpers: canonical URLs, per-page metadata, and breadcrumb structured data.
-export const SITE_URL = "https://leaftex.bio";
+// Vercel serves the site on www (the apex redirects there), so canonicals use www too.
+export const SITE_URL = "https://www.leaftex.bio";
 export const SITE_NAME = "LeafTex";
 export const ORG_ID = `${SITE_URL}/#organization`;
 
