@@ -3,7 +3,7 @@ import ContactForm from "@/components/ui/ContactForm";
 import JsonLd from "@/components/ui/JsonLd";
 import { Reveal } from "@/components/ui/Primitives";
 import Icon from "@/components/ui/Icon";
-import { pageMetadata, breadcrumbLd } from "@/lib/seo";
+import { pageMetadata, breadcrumbLd, absoluteUrl } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Contact — Samples, Pricing & Partnerships",
@@ -17,7 +17,7 @@ const contactLd = {
   "@context": "https://schema.org",
   "@type": "ContactPage",
   name: "Contact LeafTex",
-  url: "https://leaftex.bio/contact",
+  url: absoluteUrl("/contact"),
   about: { "@type": "Organization", name: "LeafTex Bio Pvt Ltd", email: "founders@leaftex.bio", telephone: "+91-93531-42107" },
 };
 

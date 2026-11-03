@@ -194,8 +194,8 @@ last commit is an older static version). To go live:
    NOT uploaded — you must set these in the dashboard.)
 4. **Deploy.** Vercel gives a `*.vercel.app` URL.
 5. **Custom domain:** add `leaftex.bio` in Vercel → Domains and point DNS as instructed.
-6. After domain is live, update `SITE_URL` in `app/layout.js`, `sitemap.js`, and
-   `robots.js` if it ever differs from `https://leaftex.bio`.
+6. If the primary domain ever changes from `https://www.leaftex.bio`, update `SITE_URL`
+   in `src/lib/seo.js` — canonicals, sitemap, robots and structured data all read it.
 
 ---
 
@@ -203,7 +203,7 @@ last commit is an older static version). To go live:
 
 - Per-route `metadata` with titles, descriptions, and canonical URLs; a global title
   template `"%s — LeafTex"`.
-- `metadataBase` set to `https://leaftex.bio`; Open Graph + Twitter card tags (default
+- `metadataBase` set to `https://www.leaftex.bio`; Open Graph + Twitter card tags (default
   image `/fiber.png`).
 - **Structured data (JSON-LD)** via `components/ui/JsonLd.jsx`: Organization + WebSite
   (global), Product (each product page), FAQPage (home), BreadcrumbList (inner pages),
