@@ -36,7 +36,7 @@ export default function Products() {
             <span className="eyebrow">Fiber types</span>
             <span className="label-mono count">02 variants</span>
           </div>
-          <div className="grid-2" style={{ marginBottom: 0 }}>
+          <div className="grid-2 m-scroll" style={{ marginBottom: 0, "--m-w": "86%" }}>
             {FIBERS.map((f, i) => (
               <Reveal key={f.name} delay={i * 100}>
                 <article className="card card--flush card--hover fiber-row">
@@ -69,7 +69,7 @@ export default function Products() {
             <span className="eyebrow">Leather colorways</span>
             <span className="label-mono count">05 colorways</span>
           </div>
-          <div className="swatches">
+          <div className="swatches m-scroll" style={{ "--m-w": "46%" }}>
             {COLORWAYS.map((c, i) => (
               <Reveal key={c.name} delay={i * 70}>
                 <Link href="/products/vegan-leather" className="card card--flush card--hover swatch">

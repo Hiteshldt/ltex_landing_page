@@ -34,7 +34,7 @@ export default function ProductsPage() {
           </div>
         }
       >
-        <div className="grid-4">
+        <div className="grid-4 m-scroll" style={{ "--m-w": "72%" }}>
           {PRODUCT_LINES.map((l, i) => (
             <Reveal key={l.href} delay={i * 90}>
               <Link href={l.href} className="card card--flush card--hover line-card">
