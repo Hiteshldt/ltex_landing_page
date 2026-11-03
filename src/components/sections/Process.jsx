@@ -1,86 +1,120 @@
 "use client";
+import { useEffect, useState } from "react";
 import { Reveal, SectionHead } from "@/components/ui/Primitives";
 
-function CircleDiagram({ steps }) {
-  const size = 380;
-  const r = 150;
-  const cx = size / 2;
-  const cy = size / 2;
+const STEPS = [
+  { n: "1", t: "Sourcing Feedstock", d: "Pseudostems from banana FPOs, pineapple leaves from orchards, and responsibly-harvested marine algae." },
+  { n: "2", t: "Extraction Hubs", d: "Mechanical decortication and green extraction pull premium fiber from crop and marine wastes." },
+  { n: "3", t: "Combing & Spinning", d: "Raw fibers are degummed, combed, and blended for high-tenacity industrial spinning." },
+  { n: "4", t: "Biomaterial Synthesis", d: "Internal plant starches and marine polymers are formulated into leathers and edible films." },
+  { n: "5", t: "Organic Recycling", d: "Residual cellulose pulp is fully composted, locking nutrients back into organic form." },
+  { n: "6", t: "Back to Cultivators", d: "Compost delivered free to partner farmers and growers, completely closing the circular loop." },
+];
+
+const C = 200;
+const R = 150;
+const r2 = (n) => Math.round(n * 100) / 100;
+const NODES = STEPS.map((s, i) => {
+  const a = (i / STEPS.length) * Math.PI * 2 - Math.PI / 2;
+  const cos = Math.cos(a);
+  return {
+    x: r2(C + cos * R),
+    y: r2(C + Math.sin(a) * R),
+    lx: r2(C + cos * (R + 40)),
+    ly: r2(C + Math.sin(a) * (R + 40)),
+    anchor: Math.abs(cos) < 0.2 ? "middle" : cos > 0 ? "start" : "end",
+    label: s.t.split(" ")[0],
+  };
+});
+
+function Orbit({ active, onSelect }) {
   return (
-    <div style={{ position: "relative", width: "100%", maxWidth: size, aspectRatio: "1", margin: "0 auto" }}>
-      <svg viewBox={`0 0 ${size} ${size}`} style={{ width: "100%", height: "100%", position: "absolute", inset: 0 }}>
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#d6dae0" strokeWidth="1.5" strokeDasharray="4 6" />
-        <circle cx={cx} cy={cy} r="62" fill="#0e1116" />
-        <text x={cx} y={cy - 8} textAnchor="middle" fill="#18C25A" fontFamily="JetBrains Mono" fontSize="9" letterSpacing="2">CIRCULAR</text>
-        <text x={cx} y={cy + 10} textAnchor="middle" fill="#fff" fontFamily="Plus Jakarta Sans" fontWeight="800" fontSize="15">Zero-Waste</text>
-        <text x={cx} y={cy + 26} textAnchor="middle" fill="#9aa3ad" fontFamily="Plus Jakarta Sans" fontSize="9">100% Upcycled</text>
-        {steps.map((s, i) => {
-          const angle = (i / steps.length) * Math.PI * 2 - Math.PI / 2;
-          const x = cx + Math.cos(angle) * r;
-          const y = cy + Math.sin(angle) * r;
+    <div className="orbit">
+      <svg viewBox="0 0 400 400" role="img" aria-label="Six-step circular, zero-waste process">
+        <defs>
+          <radialGradient id="orbit-core">
+            <stop offset="0%" stopColor="#18C25A" stopOpacity="0.22" />
+            <stop offset="100%" stopColor="#18C25A" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <circle cx={C} cy={C} r="120" fill="url(#orbit-core)" />
+        <circle cx={C} cy={C} r={R} fill="none" stroke="#fff" strokeOpacity="0.16" strokeWidth="1.5" strokeDasharray="3 7" />
+        <circle
+          className="orbit-arc"
+          cx={C} cy={C} r={R}
+          fill="none" stroke="#18C25A" strokeWidth="2.5" strokeLinecap="round"
+          pathLength="100" strokeDasharray="100"
+          strokeDashoffset={100 - (active / STEPS.length) * 100}
+          transform={`rotate(-90 ${C} ${C})`}
+        />
+        <g className="stem-spin" style={{ animationDuration: "16s" }}>
+          <circle cx={C} cy={C - R} r="3.5" fill="#18C25A" />
+        </g>
+        <circle cx={C} cy={C} r="68" fill="#10271b" stroke="#18C25A" strokeOpacity="0.4" />
+
+        {NODES.map((n, i) => {
+          const on = i === active;
+          const done = i < active;
           return (
-            <g key={s.n}>
-              <circle cx={x} cy={y} r="22" fill="#fff" stroke="#18C25A" strokeWidth="2" />
-              <text x={x} y={y + 5} textAnchor="middle" fill="#0e1116" fontFamily="Plus Jakarta Sans" fontWeight="800" fontSize="14">{s.n}</text>
-              <text x={x} y={y + (Math.sin(angle) >= 0 ? 44 : -32)} textAnchor="middle" fill="#0e1116" fontFamily="Plus Jakarta Sans" fontWeight="700" fontSize="10">{s.t.split(" ")[0]}</text>
-              <text x={x} y={y + (Math.sin(angle) >= 0 ? 56 : -20)} textAnchor="middle" fill="#5b6470" fontFamily="Plus Jakarta Sans" fontSize="9">{s.t.split(" ").slice(1).join(" ")}</text>
+            <g key={i} className="orbit-node" onClick={() => onSelect(i)}>
+              <circle cx={n.x} cy={n.y} r={on ? 24 : 21} fill={on ? "#18C25A" : "#0a1c13"} stroke={on || done ? "#18C25A" : "rgba(255,255,255,0.28)"} strokeWidth="1.5" />
+              <text x={n.x} y={n.y + 5} textAnchor="middle" fontSize="14" fontWeight="600" fill={on ? "#0f1512" : "#f2f5f1"}>{STEPS[i].n}</text>
+              <text x={n.lx} y={n.ly + 4} textAnchor={n.anchor} fontSize="12" fontWeight="500" fill={on ? "#ffffff" : "#82948a"}>{n.label}</text>
             </g>
           );
         })}
       </svg>
+      <div className="orbit__core" aria-hidden="true">
+        <small>Circular</small>
+        <b>Zero-Waste</b>
+        <span>100% Upcycled</span>
+      </div>
     </div>
   );
 }
 
 export default function Process() {
-  const steps = [
-    { n: "1", t: "Sourcing Feedstock", d: "Pseudostems from banana FPOs, pineapple leaves from orchards, and responsibly-harvested marine algae." },
-    { n: "2", t: "Extraction Hubs", d: "Mechanical decortication and green extraction pull premium fiber from crop and marine wastes." },
-    { n: "3", t: "Combing & Spinning", d: "Raw fibers are degummed, combed, and blended for high-tenacity industrial spinning." },
-    { n: "4", t: "Biomaterial Synthesis", d: "Internal plant starches and marine polymers are formulated into leathers and edible films." },
-    { n: "5", t: "Organic Recycling", d: "Residual cellulose pulp is fully composted, locking nutrients back into organic form." },
-    { n: "6", t: "Back to Cultivators", d: "Compost delivered free to partner farmers and growers, completely closing the circular loop." },
-  ];
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setInterval(() => setActive((a) => (a + 1) % STEPS.length), 3200);
+    return () => clearInterval(id);
+  }, [paused]);
 
   return (
-    <section id="process" style={{ background: "var(--bg-2)" }}>
+    <section id="process" className="section section--stone">
       <div className="container">
         <SectionHead
           code="Process"
           label="Circular · Zero-waste"
           title={<>From grower to fiber to <span className="green-word">soil.</span></>}
-          subtitle="A regional processing model that minimizes wet-biomass haulage, keeps margins with the platform, and lifts smallholder cultivator income — all while operating zero-waste."
+          subtitle="A regional, zero-waste model that cuts wet-biomass haulage and lifts smallholder income."
         />
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1.3fr", gap: 48, alignItems: "start" }} className="proc-grid">
-          <Reveal>
-            <CircleDiagram steps={steps} />
+        <div className="process" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+          <Reveal className="process__diagram">
+            <div className="card card--dark" style={{ padding: "clamp(24px, 4vw, 48px)" }}>
+              <Orbit active={active} onSelect={setActive} />
+            </div>
           </Reveal>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }} className="proc-list">
-            {steps.map((s, i) => (
-              <Reveal key={s.n} delay={i * 80}>
-                <div className="card outline" style={{ height: "100%", display: "flex", flexDirection: "column", gap: 10 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--green-soft)", color: "var(--green-ink)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 16, border: "1.5px solid var(--green)" }}>
-                    {s.n}
+          <ol className="steps" style={{ listStyle: "none", margin: 0, padding: 0 }}>
+            {STEPS.map((s, i) => (
+              <Reveal as="li" key={s.n} delay={i * 70}>
+                <div className={`step ${i === active ? "is-active" : ""}`} onMouseEnter={() => setActive(i)} onClick={() => setActive(i)}>
+                  <span className="step__n">0{s.n}</span>
+                  <div>
+                    <h3>{s.t}</h3>
+                    <div className="step__body"><p className="body-s">{s.d}</p></div>
                   </div>
-                  <div style={{ fontWeight: 700, fontSize: 17, color: "var(--ink)" }}>{s.t}</div>
-                  <p className="body-s" style={{ margin: 0 }}>{s.d}</p>
                 </div>
               </Reveal>
             ))}
-          </div>
+          </ol>
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 900px) {
-          .proc-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
-        }
-        @media (max-width: 600px) {
-          .proc-list { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </section>
   );
 }
