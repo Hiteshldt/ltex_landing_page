@@ -1,4 +1,3 @@
-"use client";
 import { Reveal, SectionHead, ImgPlaceholder } from "@/components/ui/Primitives";
 
 export default function Team() {
@@ -11,7 +10,7 @@ export default function Team() {
   ];
 
   return (
-    <section id="team">
+    <section id="team" className="section">
       <div className="container">
         <SectionHead
           code="Team"
@@ -20,20 +19,19 @@ export default function Team() {
           subtitle="Strategy, operations, technology, sourcing, and science — under one roof, with deep regional roots in Southern India's agricultural and coastal belts."
         />
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
           {team.map((p, i) => (
             <Reveal key={p.n} delay={i * 80}>
-              <div className="card outline" style={{ padding: 0, overflow: "hidden", height: "100%", display: "flex", flexDirection: "column" }}>
+              <div className="card card--flush" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
                 <ImgPlaceholder
                   code={`PORTRAIT / ${(i + 1).toString().padStart(2, "0")}`}
                   ratio="3 / 2"
                   prompt={`Editorial portrait of ${p.n.split(",")[0]} (${p.r}). Soft natural light, neutral studio background.`}
-                  style={{ borderRadius: 0, border: "none", borderBottom: "1px solid var(--rule)" }}
                 />
                 <div style={{ padding: "20px 22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
                   <div className="label-mono" style={{ color: "var(--green-ink)" }}>{p.tag}</div>
                   <div>
-                    <div style={{ fontWeight: 800, fontSize: 18, color: "var(--ink)", letterSpacing: "-0.01em" }}>{p.n}</div>
+                    <h3 className="display-s">{p.n}</h3>
                     <div className="body-s" style={{ marginTop: 2 }}>{p.r}</div>
                   </div>
                   <p className="body-s" style={{ margin: 0 }}>{p.b}</p>

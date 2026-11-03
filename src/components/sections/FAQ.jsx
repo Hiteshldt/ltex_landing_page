@@ -1,4 +1,6 @@
-import { SectionHead } from "@/components/ui/Primitives";
+import Link from "next/link";
+import { Reveal } from "@/components/ui/Primitives";
+import Icon, { Arrow } from "@/components/ui/Icon";
 
 export const faqData = [
   {
@@ -19,26 +21,35 @@ export const faqData = [
   },
 ];
 
-export default function FAQ() {
+export default function FAQ({ className = "" }) {
   return (
-    <section id="faq">
-      <div className="container">
-        <SectionHead
-          code="FAQ"
-          label="Common questions answered"
-          title={<>Frequently asked <span className="green-word">questions.</span></>}
-        />
-        <div>
-          {faqData.map((item) => (
-            <details key={item.q} className="faq-item">
+    <section id="faq" className={`section ${className}`}>
+      <div className="container faq">
+        <Reveal className="faq__aside">
+          <span className="eyebrow">FAQ</span>
+          <h2 className="display-l">Questions, <span className="green-word">answered.</span></h2>
+          <div className="faq__help">
+            <span className="icon-tile"><Icon name="mail" /></span>
+            <div>
+              <b>Still have a question?</b>
+              <p className="body-s">The founders reply to every enquiry within two business days.</p>
+              <Link href="/contact" className="btn btn-green btn-sm">Talk to us <Arrow /></Link>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={120} className="faq-list">
+          {faqData.map((item, i) => (
+            <details key={item.q} className="faq-item" open={i === 0}>
               <summary>
-                <span>{item.q}</span>
-                <span className="faq-plus" aria-hidden="true">+</span>
+                <span className="faq-num">0{i + 1}</span>
+                <span className="faq-q">{item.q}</span>
+                <span className="faq-plus" aria-hidden="true"><Icon name="plus" strokeWidth={2} /></span>
               </summary>
-              <p className="body-l faq-body" style={{ margin: 0 }}>{item.a}</p>
+              <p className="faq-body">{item.a}</p>
             </details>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

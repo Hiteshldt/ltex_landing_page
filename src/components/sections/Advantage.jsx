@@ -1,67 +1,73 @@
 import Link from "next/link";
 import { Reveal, SectionHead } from "@/components/ui/Primitives";
+import Icon, { Arrow } from "@/components/ui/Icon";
 
 const ADVANTAGES = [
   {
+    icon: "loop",
     k: "100%",
     sub: "feedstock utilized",
     title: "Zero-Waste Platform",
-    body: "Unparalleled yield — a true zero-waste ethos that outperforms competitors' 15–20% utilization. Every part of the banana, pineapple, and algae stream becomes a product.",
+    body: "Every part of the stream becomes a product — vs. competitors' 15–20% utilization.",
   },
   {
+    icon: "rupee",
     k: "~₹0",
     sub: "raw material cost",
     title: "Near-Zero Feedstock Cost",
-    body: "Strategic FPO partnerships around Coimbatore secure near-zero raw material costs and an infinitely renewable supply chain.",
+    body: "FPO partnerships around Coimbatore secure a near-free, renewable supply.",
   },
   {
+    icon: "link",
     k: "Native",
     sub: "blockchain",
     title: "Immutable Traceability",
-    body: "Brand-grade transparency and provable origin tracking from farm to finished product — auditable down to a specific grower, baked into every batch.",
+    body: "Provable origin from farm to finished product, down to the grower.",
   },
   {
+    icon: "users",
     k: "Direct",
     sub: "FPO partnerships",
     title: "Community-Embedded Sourcing",
-    body: "Stable feedstock secured while delivering real economic uplift to local farming communities. Social governance built directly into procurement.",
+    body: "Stable feedstock with real economic uplift for local farmers.",
   },
 ];
 
 export default function Advantage() {
   return (
-    <section id="advantage" style={{ background: "var(--bg-2)" }}>
+    <section id="advantage" className="section section--stone">
       <div className="container">
         <SectionHead
           code="Advantage"
           label="What sets us apart"
           title={<>Why LeafTex <span className="green-word">wins.</span></>}
-          subtitle="In a crowded biomaterials market, an integrated multi-output platform creates structural advantages that single-product competitors simply cannot match."
+          subtitle="One integrated, multi-output platform — advantages single-product competitors can't match."
+          actions={
+            <div className="btn-row">
+              <Link href="/technology" className="btn btn-ghost btn-sm">See our technology <Arrow /></Link>
+              <Link href="/about" className="btn btn-ghost btn-sm">About LeafTex <Arrow /></Link>
+            </div>
+          }
         />
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20 }} className="adv-grid">
+        <div className="bento">
           {ADVANTAGES.map((a, i) => (
-            <Reveal key={a.title} delay={i * 80}>
-              <div className="card outline" style={{ height: "100%", display: "flex", flexDirection: "column", gap: 10, borderLeft: "4px solid var(--green)" }}>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-                  <div className="display-m" style={{ color: "var(--green-ink)" }}>{a.k}</div>
-                  <div className="label-mono">{a.sub}</div>
+            <Reveal key={a.title} delay={i * 90}>
+              <div className={`card bento-card card--hover ${i === 0 ? "card--dark" : ""}`}>
+                <span className="icon-tile"><Icon name={a.icon} /></span>
+                <div>
+                  <div className="bento-card__k">
+                    <strong>{a.k}</strong>
+                    <span className="label-mono">{a.sub}</span>
+                  </div>
+                  <h3>{a.title}</h3>
+                  <p className="body-s">{a.body}</p>
                 </div>
-                <div style={{ fontWeight: 800, fontSize: 18, color: "var(--ink)", letterSpacing: "-0.01em" }}>{a.title}</div>
-                <p className="body-s" style={{ margin: 0 }}>{a.body}</p>
               </div>
             </Reveal>
           ))}
         </div>
-
-        <div style={{ marginTop: 28, display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <Link href="/technology" className="btn btn-ghost">See our technology <span className="arrow">→</span></Link>
-          <Link href="/about" className="btn btn-ghost">About LeafTex <span className="arrow">→</span></Link>
-        </div>
       </div>
-      <style>{`
-        @media (max-width: 760px) { .adv-grid { grid-template-columns: 1fr !important; } }
-      `}</style>
     </section>
   );
 }

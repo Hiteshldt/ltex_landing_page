@@ -1,15 +1,18 @@
 import Link from "next/link";
 import PageIntro from "@/components/ui/PageIntro";
 import { Reveal } from "@/components/ui/Primitives";
+import { Arrow } from "@/components/ui/Icon";
 import FAQ from "@/components/sections/FAQ";
 import JsonLd from "@/components/ui/JsonLd";
+import { pageMetadata, productLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "Algae Leather",
+export const metadata = pageMetadata({
+  title: "Algae Leather — Biodegradable Vegan Leather",
   description:
-    "A supple, biodegradable vegan leather cast from responsibly-harvested macro-algae — naturally anti-microbial and flame-retardant. Traceable to source. Request a swatch from LeafTex.",
-  alternates: { canonical: "/products/algae-leather" },
-};
+    "Supple, 100% biodegradable vegan leather cast from macro-algae — naturally anti-microbial and flame-retardant. Request a swatch from LeafTex.",
+  path: "/products/algae-leather",
+  image: "algae-leather",
+});
 
 const SPECS = [["Source", "Macro-algae"], ["Thickness", "0.8–1.4 mm"], ["Finish", "Supple matte"], ["Property", "Biodegradable"]];
 
@@ -20,62 +23,60 @@ const FEATURES = [
   "Customizable for fashion, footwear, and accessories",
 ];
 
-const productLd = {
-  "@context": "https://schema.org",
-  "@type": "Product",
+const productSchema = productLd({
   name: "LeafTex Algae Leather",
-  description:
-    "Supple, biodegradable vegan leather cast from responsibly-harvested macro-algae — naturally anti-microbial and flame-retardant.",
-  brand: { "@type": "Brand", name: "LeafTex" },
+  description: "Supple, biodegradable vegan leather cast from responsibly-harvested macro-algae — naturally anti-microbial and flame-retardant.",
+  path: "/products/algae-leather",
+  image: "/algae-leather.webp",
   category: "Vegan leather",
-};
+  material: ["Macro-algae"],
+});
 
 export default function AlgaeLeatherPage() {
   return (
     <>
-      <JsonLd data={productLd} />
+      <JsonLd data={productSchema} />
       <PageIntro
+        crumbs={[["Home", "/"], ["Products", "/products"], ["Algae Leather", "/products/algae-leather"]]}
         eyebrow="Products · Algae Leather"
         title={<>Leather, grown from <span className="green-word">the sea.</span></>}
         intro="Algae Leather is our marine-based vegan leather — cast from responsibly-harvested macro-algae into a supple, fully biodegradable material. It turns blooms that choke coastal ecosystems into a premium, cruelty-free alternative to animal hide."
         primary={{ href: "/contact", label: "Request a swatch" }}
         secondary={{ href: "/contact", label: "Request pricing" }}
+        aside={
+          <div className="aside-media">
+            <img src="/algae-leather.webp" alt="Roll of sage-green algae leather with a fine pebbled grain" width={1200} height={1200} />
+          </div>
+        }
       />
 
-      <section style={{ paddingTop: 24 }}>
+      <section className="section section--stone">
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, alignItems: "center" }} className="al-grid">
-            <Reveal>
-              <div className="card outline" style={{ padding: 0, overflow: "hidden" }}>
-                <img src="/algae-leather.png" alt="Roll of sage-green algae leather with a fine pebbled grain" width={720} height={720} loading="lazy" style={{ width: "100%", height: "auto", display: "block" }} />
-              </div>
+          <div className="props">
+            <Reveal className="card card--dark props__stat">
+              <span className="label-mono">biodegradable</span>
+              <div className="props__k">100%</div>
+              <p>Supple marine vegan leather cast from responsibly-harvested macro-algae. Naturally anti-microbial and flame-retardant.</p>
             </Reveal>
-            <Reveal delay={120}>
-              <div>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-                  <div className="display-l" style={{ color: "var(--green-ink)" }}>100%</div>
-                  <div className="label-mono">biodegradable</div>
-                </div>
-                <ul className="check-list" style={{ marginTop: 20 }}>
-                  {FEATURES.map((f) => <li key={f}>{f}</li>)}
-                </ul>
-                <div className="card al-specs" style={{ marginTop: 22, display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
-                  {SPECS.map(([k, v]) => (
-                    <div key={k}>
-                      <div className="label-mono">{k}</div>
-                      <div style={{ fontFamily: "var(--mono)", fontSize: 13, color: "var(--ink)", marginTop: 5, fontWeight: 500 }}>{v}</div>
-                    </div>
-                  ))}
-                </div>
-                <Link href="/contact" className="btn btn-green" style={{ marginTop: 22 }}>Request a swatch <span className="arrow">→</span></Link>
-              </div>
+            <Reveal delay={100} className="card props__list">
+              <span className="eyebrow">Key properties</span>
+              <ul className="check-list">
+                {FEATURES.map((f) => <li key={f}>{f}</li>)}
+              </ul>
             </Reveal>
           </div>
+          <Reveal>
+            <dl className="specs specs--boxed" style={{ "--cols": 4, marginTop: 16 }}>
+              {SPECS.map(([k, v]) => (
+                <div key={k}><dt>{k}</dt><dd>{v}</dd></div>
+              ))}
+            </dl>
+          </Reveal>
+          <div className="btn-row" style={{ marginTop: 28 }}>
+            <Link href="/contact" className="btn btn-green">Request a swatch <Arrow /></Link>
+            <Link href="/contact" className="btn btn-ghost">Request pricing</Link>
+          </div>
         </div>
-        <style>{`
-          @media (max-width: 900px){ .al-grid{ grid-template-columns:1fr !important; } }
-          @media (max-width: 520px){ .al-specs{ grid-template-columns:1fr 1fr !important; } }
-        `}</style>
       </section>
       <FAQ />
     </>

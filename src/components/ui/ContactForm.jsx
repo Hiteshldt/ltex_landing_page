@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Icon, { Arrow } from "@/components/ui/Icon";
 
 const INTERESTS = [
   "Spinner / Mill",
@@ -59,9 +60,10 @@ export default function ContactForm() {
 
   if (status === "ok") {
     return (
-      <div className="card outline" style={{ padding: 36, textAlign: "center" }}>
-        <div className="display-m" style={{ color: "var(--green-ink)" }}>Thank you.</div>
-        <p className="body-l" style={{ marginTop: 12, marginBottom: 20 }}>
+      <div className="card form-done" role="status">
+        <span className="icon-tile"><Icon name="check" strokeWidth={2.2} /></span>
+        <h2 className="display-m">Thank you.</h2>
+        <p className="lead">
           Your message is on its way to our founders. We&apos;ll be in touch within two business days.
         </p>
         <button type="button" className="btn btn-ghost" onClick={() => setStatus("idle")}>
@@ -72,29 +74,31 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="card outline" style={{ padding: 28, display: "flex", flexDirection: "column", gap: 18 }} noValidate>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} className="form-row">
+    <form onSubmit={onSubmit} className="card form" noValidate>
+      <fieldset className="choice">
+        <legend>I&apos;m reaching out as a…</legend>
+        {INTERESTS.map((i, idx) => (
+          <label key={i}>
+            <input type="radio" name="interest" value={i} defaultChecked={idx === 0} />
+            <span>{i}</span>
+          </label>
+        ))}
+      </fieldset>
+
+      <div className="form__row">
         <div className="field">
           <label htmlFor="cf-name">Name *</label>
-          <input id="cf-name" name="name" type="text" autoComplete="name" required />
+          <input id="cf-name" name="name" type="text" autoComplete="name" placeholder="Your full name" required />
         </div>
         <div className="field">
           <label htmlFor="cf-email">Email *</label>
-          <input id="cf-email" name="email" type="email" autoComplete="email" required />
+          <input id="cf-email" name="email" type="email" autoComplete="email" placeholder="you@company.com" required />
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} className="form-row">
-        <div className="field">
-          <label htmlFor="cf-company">Company / Organization</label>
-          <input id="cf-company" name="company" type="text" autoComplete="organization" />
-        </div>
-        <div className="field">
-          <label htmlFor="cf-interest">I'm reaching out as a…</label>
-          <select id="cf-interest" name="interest" defaultValue={INTERESTS[0]}>
-            {INTERESTS.map((i) => <option key={i} value={i}>{i}</option>)}
-          </select>
-        </div>
+      <div className="field">
+        <label htmlFor="cf-company">Company / Organization</label>
+        <input id="cf-company" name="company" type="text" autoComplete="organization" placeholder="Optional" />
       </div>
 
       <div className="field">
@@ -103,25 +107,21 @@ export default function ContactForm() {
       </div>
 
       {/* Honeypot — hidden from humans, catches bots */}
-      <div className="field" aria-hidden="true">
+      <div aria-hidden="true">
         <label htmlFor="cf-company-website" className="hp">Company website (leave blank)</label>
         <input id="cf-company-website" className="hp" name="company_website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      {status === "err" && <div className="form-status err">{error}</div>}
+      {status === "err" && <div className="form-status err" role="alert">{error}</div>}
 
-      <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+      <div className="form__foot">
         <button type="submit" className="btn btn-green" disabled={status === "sending"}>
-          {status === "sending" ? "Sending…" : "Send message"} <span className="arrow">→</span>
+          {status === "sending" ? "Sending…" : "Send message"} <Arrow />
         </button>
         <span className="form-note">
-          Or email <a href="mailto:founders@leaftex.bio" style={{ color: "var(--green-ink)", fontWeight: 600 }}>founders@leaftex.bio</a>
+          Or email <a href="mailto:founders@leaftex.bio">founders@leaftex.bio</a>
         </span>
       </div>
-
-      <style>{`
-        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr !important; } }
-      `}</style>
     </form>
   );
 }

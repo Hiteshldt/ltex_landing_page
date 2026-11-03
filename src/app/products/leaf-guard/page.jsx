@@ -1,15 +1,18 @@
 import Link from "next/link";
 import PageIntro from "@/components/ui/PageIntro";
 import { Reveal } from "@/components/ui/Primitives";
+import { Arrow } from "@/components/ui/Icon";
 import FAQ from "@/components/sections/FAQ";
 import JsonLd from "@/components/ui/JsonLd";
+import { pageMetadata, productLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "Leaf-Guard™ Edible Coating",
+export const metadata = pageMetadata({
+  title: "Leaf-Guard™ Edible Coating for Fresh Produce",
   description:
-    "Leaf-Guard™ is a starch-based edible coating from banana pith that extends fresh-produce shelf-life by 40–60%. Transparent and a drop-in for existing packhouse equipment.",
-  alternates: { canonical: "/products/leaf-guard" },
-};
+    "Leaf-Guard™ is a starch-based edible coating from banana pith that extends fresh-produce shelf-life by 40–60% — a drop-in for packhouse spray lines.",
+  path: "/products/leaf-guard",
+  image: "leaf-guard",
+});
 
 const SPECS = [["Form", "Aqueous spray"], ["Shelf-life Δ", "+40–60%"], ["Base", "Banana-pith starch"], ["Application", "Spray-on"]];
 
@@ -20,62 +23,60 @@ const FEATURES = [
   "Drop-in for existing packhouse spray equipment",
 ];
 
-const productLd = {
-  "@context": "https://schema.org",
-  "@type": "Product",
+const productSchema = productLd({
   name: "Leaf-Guard™ Edible Coating",
-  description:
-    "Starch-based edible coating from banana pith that extends fresh-produce shelf-life by 40–60%.",
-  brand: { "@type": "Brand", name: "LeafTex" },
+  description: "Starch-based edible coating from banana pith that extends fresh-produce shelf-life by 40–60%.",
+  path: "/products/leaf-guard",
+  image: "/coating.webp",
   category: "Edible produce coating",
-};
+  material: ["Banana-pith starch"],
+});
 
 export default function LeafGuardPage() {
   return (
     <>
-      <JsonLd data={productLd} />
+      <JsonLd data={productSchema} />
       <PageIntro
+        crumbs={[["Home", "/"], ["Products", "/products"], ["Leaf-Guard™", "/products/leaf-guard"]]}
         eyebrow="Products · Leaf-Guard™"
         title={<>Shelf-life, <span className="green-word">extended.</span></>}
         intro="Leaf-Guard™ is our starch-based edible coating, sprayed onto fresh produce to slow ripening and cut food waste — a third revenue stream from the same banana feedstock, and a direct answer to the 33% of food that's lost or wasted."
         primary={{ href: "/contact", label: "Start a pilot" }}
         secondary={{ href: "/contact", label: "Request pricing" }}
+        aside={
+          <div className="aside-media aside-media--contain">
+            <img src="/coating.webp" alt="Leaf-Guard coated produce staying fresh versus uncoated" width={1200} height={1200} />
+          </div>
+        }
       />
 
-      <section style={{ paddingTop: 24 }}>
+      <section className="section section--stone">
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, alignItems: "center" }} className="lg-grid">
-            <Reveal>
-              <div className="card outline" style={{ padding: 0, overflow: "hidden" }}>
-                <img src="/coating.png" alt="Leaf-Guard coated produce staying fresh versus uncoated" width={720} height={540} loading="lazy" style={{ width: "100%", height: "auto", display: "block" }} />
-              </div>
+          <div className="props">
+            <Reveal className="card card--dark props__stat">
+              <span className="label-mono">shelf-life uplift</span>
+              <div className="props__k">+60%</div>
+              <p>Starch-based spray from banana pith. +40–60% produce shelf-life. Drop-in for existing packhouse equipment.</p>
             </Reveal>
-            <Reveal delay={120}>
-              <div>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-                  <div className="display-l" style={{ color: "var(--green-ink)" }}>+60%</div>
-                  <div className="label-mono">shelf-life uplift</div>
-                </div>
-                <ul className="check-list" style={{ marginTop: 20 }}>
-                  {FEATURES.map((f) => <li key={f}>{f}</li>)}
-                </ul>
-                <div className="card lg-specs" style={{ marginTop: 22, display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
-                  {SPECS.map(([k, v]) => (
-                    <div key={k}>
-                      <div className="label-mono">{k}</div>
-                      <div style={{ fontFamily: "var(--mono)", fontSize: 13, color: "var(--ink)", marginTop: 5, fontWeight: 500 }}>{v}</div>
-                    </div>
-                  ))}
-                </div>
-                <Link href="/contact" className="btn btn-green" style={{ marginTop: 22 }}>Start a pilot <span className="arrow">→</span></Link>
-              </div>
+            <Reveal delay={100} className="card props__list">
+              <span className="eyebrow">Key properties</span>
+              <ul className="check-list">
+                {FEATURES.map((f) => <li key={f}>{f}</li>)}
+              </ul>
             </Reveal>
           </div>
+          <Reveal>
+            <dl className="specs specs--boxed" style={{ "--cols": 4, marginTop: 16 }}>
+              {SPECS.map(([k, v]) => (
+                <div key={k}><dt>{k}</dt><dd>{v}</dd></div>
+              ))}
+            </dl>
+          </Reveal>
+          <div className="btn-row" style={{ marginTop: 28 }}>
+            <Link href="/contact" className="btn btn-green">Start a pilot <Arrow /></Link>
+            <Link href="/contact" className="btn btn-ghost">Request pricing</Link>
+          </div>
         </div>
-        <style>{`
-          @media (max-width: 900px){ .lg-grid{ grid-template-columns:1fr !important; } }
-          @media (max-width: 520px){ .lg-specs{ grid-template-columns:1fr 1fr !important; } }
-        `}</style>
       </section>
       <FAQ />
     </>

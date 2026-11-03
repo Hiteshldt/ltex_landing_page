@@ -1,97 +1,68 @@
-"use client";
 import { Reveal, SectionHead } from "@/components/ui/Primitives";
 
-function FlowBar({ items }) {
-  return (
-    <div style={{ display: "flex", height: 56, borderRadius: 8, overflow: "hidden", border: "1px solid var(--rule)" }}>
-      {items.map((it, i) => (
-        <div
-          key={it.label}
-          style={{
-            flex: it.pct,
-            background: it.color,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            color: "#fff", fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.06em",
-            borderRight: i < items.length - 1 ? "1px solid #fff" : "none",
-            fontWeight: 600,
-          }}
-        >
-          {it.pct}%
-        </div>
-      ))}
-    </div>
-  );
-}
+const FLOW = [
+  { label: "Fibers", pct: 40, out: "400 kg / t", color: "#18C25A" },
+  { label: "Leathers", pct: 20, out: "200 sqm / t", color: "#2f8f57" },
+  { label: "Coatings", pct: 15, out: "150 L / t", color: "#e9b949" },
+  { label: "Compost", pct: 25, out: "→ growers", color: "#6f8278" },
+];
 
-function ImpactCard({ k, title, body }) {
-  return (
-    <div className="card outline" style={{ flex: 1, display: "flex", flexDirection: "column", gap: 10, justifyContent: "space-between", borderLeft: "4px solid var(--green)" }}>
-      <div className="display-m" style={{ color: "var(--green-ink)" }}>{k}</div>
-      <div>
-        <div style={{ fontWeight: 700, color: "var(--ink)", marginBottom: 6 }}>{title}</div>
-        <p className="body-s" style={{ margin: 0 }}>{body}</p>
-      </div>
-    </div>
-  );
-}
+const IMPACTS = [
+  ["–82%", "Carbon vs. legacy leather", "No cattle-stage emissions or chrome-tanning effluent."],
+  ["+₹14k", "Per-acre cultivator income", "Estimated annual uplift for partner growers."],
+  ["0 ml", "Discharge to landfill", "Closed-loop water and full pulp valorization."],
+];
 
 export default function Impact() {
   return (
-    <section id="impact" style={{ background: "var(--bg-2)" }}>
-      <div className="container">
+    <section id="impact" className="section section--dark">
+      <div className="section-glow" style={{ left: -260, top: -320 }} aria-hidden="true" />
+      <div className="container" style={{ position: "relative" }}>
         <SectionHead
           code="Impact"
           label="Circular by design"
           title={<>Zero waste isn&apos;t a feature. It&apos;s the <span className="green-word">premise.</span></>}
-          subtitle="Every kilogram of feedstock leaves the system as a product — fiber, leather, coating, or compost. We measure ourselves on what we don't throw away."
+          subtitle="Every kilogram of feedstock leaves as a product — fiber, leather, coating, or compost."
         />
 
-        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 28 }} className="impact-grid">
-          <Reveal>
-            <div className="card outline" style={{ padding: 36 }}>
-              <div className="label-mono">Platform resource yield</div>
-              <h3 className="display-s" style={{ margin: "8px 0 28px" }}>Output by material type</h3>
-              <FlowBar items={[
-                { label: "Premium Fibers (Banana, Pineapple)", pct: 40, color: "#18C25A" },
-                { label: "Vegan Leathers", pct: 20, color: "#0c5c2e" },
-                { label: "Edible Coatings", pct: 15, color: "#f0c429" },
-                { label: "Vermicompost returned to soil", pct: 25, color: "#9aa3ad" },
-              ]} />
-              <div style={{ marginTop: 28, display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16, paddingTop: 24, borderTop: "1px solid var(--rule)" }} className="flow-legend">
-                {[
-                  ["Fibers", "40%", "400 kg / t", "#18C25A"],
-                  ["Leathers", "20%", "200 sqm / t", "#0c5c2e"],
-                  ["Coatings", "15%", "150 L / t", "#f0c429"],
-                  ["Compost", "25%", "→ growers", "#9aa3ad"],
-                ].map(([k, p, v, c]) => (
-                  <div key={k}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ width: 8, height: 8, borderRadius: 2, background: c }} />
-                      <div className="label-mono">{k}</div>
-                    </div>
-                    <div className="display-s" style={{ marginTop: 6 }}>{p}</div>
-                    <div className="body-s" style={{ marginTop: 2 }}>{v}</div>
+        <div className="impact-grid">
+          <Reveal className="card card--dark">
+            <span className="label-mono">Platform resource yield</span>
+            <h3 className="display-s" style={{ margin: "10px 0 30px", color: "#fff" }}>Output by material type</h3>
+            <div className="flow" role="img" aria-label="Fibers 40%, leathers 20%, coatings 15%, compost 25%">
+              {FLOW.map((f) => (
+                <div key={f.label} style={{ flex: f.pct, background: f.color, color: f.label === "Coatings" ? "#0f1512" : undefined }}>
+                  {f.pct}%
+                </div>
+              ))}
+            </div>
+            <div className="flow-legend">
+              {FLOW.map((f) => (
+                <div key={f.label}>
+                  <div className="flow-legend__k">
+                    <i style={{ background: f.color }} />
+                    <span className="label-mono">{f.label}</span>
                   </div>
-                ))}
-              </div>
+                  <strong>{f.pct}%</strong>
+                  <span className="v">{f.out}</span>
+                </div>
+              ))}
             </div>
           </Reveal>
 
-          <Reveal delay={150}>
-            <div className="col gap-16" style={{ height: "100%" }}>
-              <ImpactCard k="–82%" title="Carbon vs. legacy leather" body="Upcycled vegan leather production avoids cattle-stage emissions and chrome-tanning effluent." />
-              <ImpactCard k="+₹14k" title="Per-acre cultivator income" body="Estimated annual uplift for partner farmers and growers from previously-discarded residues." />
-              <ImpactCard k="0 ml" title="Discharge to landfill" body="Closed-loop water and full pulp valorization across the entire materials platform." />
-            </div>
-          </Reveal>
+          <div className="impact-stack">
+            {IMPACTS.map(([k, title, body], i) => (
+              <Reveal key={title} delay={120 + i * 100} className="card card--dark impact-card">
+                <strong>{k}</strong>
+                <div>
+                  <h3>{title}</h3>
+                  <p>{body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
-      <style>{`
-        @media (max-width: 900px) {
-          .impact-grid { grid-template-columns: 1fr !important; }
-          .flow-legend { grid-template-columns: 1fr 1fr !important; }
-        }
-      `}</style>
     </section>
   );
 }

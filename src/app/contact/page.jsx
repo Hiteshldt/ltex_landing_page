@@ -1,13 +1,17 @@
-import PageIntro from "@/components/ui/PageIntro";
+import Link from "next/link";
 import ContactForm from "@/components/ui/ContactForm";
 import JsonLd from "@/components/ui/JsonLd";
+import { Reveal } from "@/components/ui/Primitives";
+import Icon from "@/components/ui/Icon";
+import { pageMetadata, breadcrumbLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "Contact & Partner With Us",
+export const metadata = pageMetadata({
+  title: "Contact — Samples, Pricing & Partnerships",
   description:
-    "Talk to LeafTex about samples, pricing, pilots, or partnership. Sample kits ship to spinners, brands, packhouses, and packagers within five business days. Based in Coimbatore, Tamil Nadu.",
-  alternates: { canonical: "/contact" },
-};
+    "Request samples, pricing or a pilot. LeafTex ships sample kits to spinners, brands, packhouses and packagers within five business days.",
+  path: "/contact",
+  image: "contact",
+});
 
 const contactLd = {
   "@context": "https://schema.org",
@@ -18,53 +22,56 @@ const contactLd = {
 };
 
 const DETAILS = [
-  ["Email", "founders@leaftex.bio", "mailto:founders@leaftex.bio"],
-  ["Phone", "+91 93531 42107", "tel:+919353142107"],
-  ["Studio", "Coimbatore, Tamil Nadu, India — 641020", null],
+  ["mail", "Email", "founders@leaftex.bio", "mailto:founders@leaftex.bio"],
+  ["phone", "Phone", "+91 93531 42107", "tel:+919353142107"],
+  ["pin", "Studio", "Coimbatore, Tamil Nadu, India — 641020", null],
 ];
 
 export default function ContactPage() {
   return (
     <>
       <JsonLd data={contactLd} />
-      <PageIntro
-        eyebrow="Partner with us"
-        title={<>Trace your <span className="green-word">thread.</span></>}
-        intro="Tell us about your application — spinning, fashion, packhouse, or packaging — and what you'd like pricing or samples for. We ship swatch books within five business days and reply to every enquiry within two."
-      />
-
-      <section style={{ paddingTop: 24 }}>
-        <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 32, alignItems: "start" }} className="contact-grid">
-            <ContactForm />
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <div className="card">
-                <div className="label-mono" style={{ color: "var(--green-ink)", fontWeight: 700 }}>Reach us directly</div>
-                <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 16 }}>
-                  {DETAILS.map(([k, v, href]) => (
-                    <div key={k}>
-                      <div className="label-mono">{k}</div>
-                      {href ? (
-                        <a href={href} style={{ color: "var(--ink)", fontWeight: 600, textDecoration: "none", fontSize: 15 }}>{v}</a>
-                      ) : (
-                        <div style={{ color: "var(--ink)", fontWeight: 600, fontSize: 15 }}>{v}</div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="card outline" style={{ borderLeft: "4px solid var(--green)" }}>
-                <div style={{ fontWeight: 700, color: "var(--ink)" }}>Who we ship to</div>
-                <p className="body-s" style={{ marginTop: 8, marginBottom: 0 }}>
-                  Spinners &amp; mills, fashion &amp; accessory brands, packhouses, and packaging companies. Every sample ships with full chain-of-custody data.
-                </p>
-              </div>
+      <JsonLd data={breadcrumbLd([["Home", "/"], ["Contact", "/contact"]])} />
+      {/* Intro, direct details and the form share one screen. */}
+      <header className="page-intro contact-intro">
+        <div className="page-intro__bg" aria-hidden="true" />
+        <div className="container page-intro__grid has-aside">
+          <div className="page-intro__copy">
+            <nav className="crumbs fade-up" aria-label="Breadcrumb">
+              <Link href="/">Home</Link>
+              <span aria-hidden="true">/</span>
+              <span aria-current="page">Contact</span>
+            </nav>
+            <span className="eyebrow fade-up" style={{ "--d": "80ms" }}>Partner with us</span>
+            <h1 className="display-xl fade-up" style={{ "--d": "160ms" }}>Trace your <span className="green-word">thread.</span></h1>
+            <p className="lead fade-up" style={{ "--d": "260ms" }}>
+              Tell us about your application — spinning, fashion, packhouse, or packaging — and what you&apos;d like
+              pricing or samples for. We ship swatch books within five business days and reply to every enquiry within two.
+            </p>
+            <div className="reach fade-up" style={{ "--d": "360ms" }}>
+              {DETAILS.map(([icon, k, v, href]) => {
+                const Row = href ? "a" : "div";
+                return (
+                  <Row key={k} className="reach__row" {...(href ? { href } : {})}>
+                    <span className="icon-tile"><Icon name={icon} /></span>
+                    <span>
+                      <span className="label-mono">{k}</span>
+                      <b>{v}</b>
+                    </span>
+                  </Row>
+                );
+              })}
             </div>
+            <p className="body-s reach__note fade-up" style={{ "--d": "440ms" }}>
+              <b>Who we ship to —</b> spinners &amp; mills, fashion &amp; accessory brands, packhouses, and packaging
+              companies. Every sample ships with full chain-of-custody data.
+            </p>
+          </div>
+          <div className="page-intro__aside fade-up" style={{ "--d": "300ms" }}>
+            <ContactForm />
           </div>
         </div>
-        <style>{`@media (max-width: 860px){ .contact-grid{ grid-template-columns:1fr !important; } }`}</style>
-      </section>
+      </header>
     </>
   );
 }

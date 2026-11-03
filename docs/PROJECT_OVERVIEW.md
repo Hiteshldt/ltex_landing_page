@@ -39,7 +39,7 @@ for capturing leads (spinners, brands, packhouses, investors).
 | Language         | **JavaScript** (`.js` / `.jsx`)           | No TypeScript |
 | Bundler          | **Turbopack**                             | Next 16 default |
 | Styling          | **Plain CSS** (`src/app/globals.css`) + inline styles | No Tailwind / CSS-in-JS framework. A small design-token system via CSS variables |
-| Fonts            | **Google Fonts** — Plus Jakarta Sans (display/sans) + JetBrains Mono (mono) | Loaded in `layout.js` |
+| Fonts            | **next/font (self-hosted Google Fonts)** — Geist (UI/display), Instrument Serif (italic accents), Geist Mono (labels), Plus Jakarta Sans (wordmark only) | Loaded in `layout.js` |
 | Email            | **Resend** (see §6)                       | Contact form delivery |
 | Hosting (target) | **Vercel** (see §7)                       | Not yet deployed |
 | Path alias       | `@/` → `src/` (configured in `jsconfig.json`) | e.g. `@/components/sections/Hero` |

@@ -3,16 +3,10 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Wordmark } from "@/components/ui/Primitives";
-
-const PRODUCTS = [
-  ["Banana & Pineapple Fibers", "/products/fibers"],
-  ["Vegan Leather", "/products/vegan-leather"],
-  ["Algae Leather", "/products/algae-leather"],
-  ["Leaf-Guard™ Coating", "/products/leaf-guard"],
-];
+import Icon, { Arrow } from "@/components/ui/Icon";
+import { PRODUCT_LINES } from "@/lib/productLines";
 
 const LINKS = [
-  ["Home", "/"],
   ["Technology", "/technology"],
   ["About Us", "/about"],
   ["Contact", "/contact"],
@@ -25,137 +19,149 @@ export default function Nav() {
   const [prodOpen, setProdOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 12);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close the mobile menu whenever the route changes.
+  // Close menus whenever the route changes.
   useEffect(() => {
     setMenuOpen(false);
     setProdOpen(false);
   }, [pathname]);
 
-  const isActive = (href) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
-  const productsActive = pathname.startsWith("/products");
+  // Lock page scroll behind the mobile menu; Escape closes everything.
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        setMenuOpen(false);
+        setProdOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
 
-  const navStyle = {
-    position: "fixed",
-    top: 4,
-    left: 0,
-    right: 0,
-    zIndex: 60,
-    transition:
-      "background 220ms ease, border-color 220ms ease, backdrop-filter 220ms ease",
-    background: scrolled || menuOpen ? "rgba(255,255,255,0.92)" : "transparent",
-    backdropFilter: scrolled || menuOpen ? "blur(14px) saturate(140%)" : "none",
-    WebkitBackdropFilter: scrolled || menuOpen ? "blur(14px) saturate(140%)" : "none",
-    borderBottom: scrolled || menuOpen ? "1px solid var(--rule)" : "1px solid transparent",
-  };
-
-  const linkStyle = (active) => ({
-    fontFamily: "var(--sans)",
-    fontSize: 14,
-    fontWeight: 600,
-    color: active ? "var(--ink)" : "var(--ink-2)",
-    textDecoration: "none",
-    padding: "6px 0",
-    borderBottom: active ? "2px solid var(--green)" : "2px solid transparent",
-  });
+  const isActive = (href) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
     <>
-      <div className="brand-strip" style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 70 }} />
-      <nav style={navStyle}>
-        <div
-          className="container"
-          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}
-        >
-          <Link href="/" aria-label="LeafTex home" style={{ display: "inline-flex", alignItems: "baseline", textDecoration: "none" }}>
+      <header className={`nav ${scrolled || menuOpen ? "is-solid" : ""}`}>
+        <div className="container nav__inner">
+          <Link href="/" aria-label="LeafTex home" className="nav__logo">
             <Wordmark size={22} />
           </Link>
 
-          {/* Desktop links */}
-          <div className="nav-links" style={{ display: "flex", alignItems: "center", gap: 30 }}>
-            <Link href="/" style={linkStyle(pathname === "/")}>Home</Link>
+          <nav className="nav__links" aria-label="Primary">
+            <Link href="/" className={`nav__link ${isActive("/") ? "is-active" : ""}`}>Home</Link>
 
-            {/* Products dropdown */}
             <div
-              className="nav-dropdown"
+              className={`nav__dd ${prodOpen ? "is-open" : ""}`}
               onMouseEnter={() => setProdOpen(true)}
               onMouseLeave={() => setProdOpen(false)}
-              style={{ position: "relative" }}
+              onFocus={() => setProdOpen(true)}
+              onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setProdOpen(false)}
             >
               <Link
                 href="/products"
-                style={{ ...linkStyle(productsActive), display: "inline-flex", alignItems: "center", gap: 5 }}
+                className={`nav__link ${isActive("/products") ? "is-active" : ""}`}
                 aria-haspopup="true"
                 aria-expanded={prodOpen}
               >
-                Products
-                <span style={{ fontSize: 10, transform: prodOpen ? "rotate(180deg)" : "none", transition: "transform 160ms ease" }}>▾</span>
+                Products <Icon name="chevron-down" className="chev" strokeWidth={2} />
               </Link>
-              <div className={`dropdown-menu ${prodOpen ? "open" : ""}`}>
-                {PRODUCTS.map(([label, href]) => (
-                  <Link key={href} href={href} className="dropdown-item">{label}</Link>
-                ))}
+              <div className="mega">
+                <div className="mega__grid">
+                  {PRODUCT_LINES.map((p) => (
+                    <Link key={p.href} href={p.href} className="mega__item">
+                      <span className="mega__thumb"><img src={p.img} alt="" loading="lazy" /></span>
+                      <span>
+                        <span className="mega__name" style={{ display: "block" }}>{p.name}</span>
+                        <span className="mega__desc" style={{ display: "block" }}>{p.tag}</span>
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+                <div className="mega__foot">
+                  <span>One zero-waste platform — all traceable to source.</span>
+                  <Link href="/products" className="link-arrow link-arrow--green">
+                    All products <Icon name="arrow-up-right" strokeWidth={2} />
+                  </Link>
+                </div>
               </div>
             </div>
 
-            <Link href="/technology" style={linkStyle(isActive("/technology"))}>Technology</Link>
-            <Link href="/about" style={linkStyle(isActive("/about"))}>About Us</Link>
-            <Link href="/contact" style={linkStyle(isActive("/contact"))}>Contact</Link>
-          </div>
+            {LINKS.map(([label, href]) => (
+              <Link key={href} href={href} className={`nav__link ${isActive(href) ? "is-active" : ""}`}>{label}</Link>
+            ))}
+          </nav>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <Link href="/contact" className="btn btn-green nav-cta" style={{ padding: "10px 18px", fontSize: 13 }}>
-              Partner with us <span className="arrow">→</span>
+          <div className="nav__actions">
+            <Link href="/contact" className="btn btn-green btn-sm nav__cta">
+              Partner with us <Arrow />
             </Link>
             <button
               type="button"
-              className="nav-burger"
-              aria-label="Toggle menu"
+              className="nav__burger"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
+              aria-controls="mobile-nav"
               onClick={() => setMenuOpen((o) => !o)}
             >
-              <span style={{ transform: menuOpen ? "translateY(6px) rotate(45deg)" : "none" }} />
-              <span style={{ opacity: menuOpen ? 0 : 1 }} />
-              <span style={{ transform: menuOpen ? "translateY(-6px) rotate(-45deg)" : "none" }} />
+              <span />
+              <span />
             </button>
           </div>
         </div>
+        <span className="nav__progress" aria-hidden="true" />
+      </header>
 
-        {/* Mobile drawer */}
-        <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
-          <div className="container" style={{ display: "flex", flexDirection: "column", gap: 4, paddingTop: 8, paddingBottom: 20 }}>
-            <Link href="/" className="mobile-link">Home</Link>
-            <button
-              type="button"
-              className="mobile-link mobile-acc"
-              onClick={() => setProdOpen((o) => !o)}
-              aria-expanded={prodOpen}
-            >
-              Products <span style={{ transform: prodOpen ? "rotate(180deg)" : "none", transition: "transform 160ms ease" }}>▾</span>
-            </button>
-            {prodOpen && (
-              <div style={{ display: "flex", flexDirection: "column", paddingLeft: 14 }}>
-                <Link href="/products" className="mobile-sublink">All products</Link>
-                {PRODUCTS.map(([label, href]) => (
-                  <Link key={href} href={href} className="mobile-sublink">{label}</Link>
-                ))}
-              </div>
-            )}
-            {LINKS.filter(([, h]) => h !== "/").map(([label, href]) => (
-              <Link key={href} href={href} className="mobile-link">{label}</Link>
-            ))}
-            <Link href="/contact" className="btn btn-green" style={{ marginTop: 12, justifyContent: "center" }}>
-              Partner with us <span className="arrow">→</span>
+      {/* Mobile menu */}
+      <div id="mobile-nav" className={`mnav ${menuOpen ? "is-open" : ""}`} aria-hidden={!menuOpen}>
+        <div className="container mnav__inner">
+          <Link href="/" className="mnav__link" tabIndex={menuOpen ? 0 : -1}>Home</Link>
+          <button
+            type="button"
+            className="mnav__link"
+            onClick={() => setProdOpen((o) => !o)}
+            aria-expanded={prodOpen}
+            tabIndex={menuOpen ? 0 : -1}
+          >
+            Products <Icon name="chevron-down" className="chev" strokeWidth={1.75} />
+          </button>
+          {prodOpen && (
+            <div className="mnav__sub">
+              {PRODUCT_LINES.map((p) => (
+                <Link key={p.href} href={p.href}>
+                  <img src={p.img} alt="" loading="lazy" />
+                  {p.name}
+                </Link>
+              ))}
+              <Link href="/products" className="mnav__all">
+                All products <Icon name="arrow-right" size={18} strokeWidth={2} />
+              </Link>
+            </div>
+          )}
+          {LINKS.map(([label, href]) => (
+            <Link key={href} href={href} className="mnav__link" tabIndex={menuOpen ? 0 : -1}>{label}</Link>
+          ))}
+          <div className="mnav__foot">
+            <Link href="/contact" className="btn btn-green" style={{ width: "100%" }} tabIndex={menuOpen ? 0 : -1}>
+              Partner with us <Arrow />
             </Link>
+            <div className="mnav__contact">
+              <a href="mailto:founders@leaftex.bio">founders@leaftex.bio</a>
+              <a href="tel:+919353142107">+91 93531 42107</a>
+              <span>Coimbatore, Tamil Nadu, India</span>
+            </div>
           </div>
         </div>
-      </nav>
+      </div>
     </>
   );
 }

@@ -1,4 +1,4 @@
-const SITE_URL = "https://leaftex.bio";
+import { SITE_URL } from "@/lib/seo";
 
 export default function robots() {
   return {

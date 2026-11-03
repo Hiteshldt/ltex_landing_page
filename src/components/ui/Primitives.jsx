@@ -1,39 +1,22 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-export function ImgPlaceholder({ code, prompt, src, ratio = "4 / 3", dark = false, style = {} }) {
-  if (src) {
-    return (
-      <div
-        className={`img-placeholder ${dark ? "dark" : ""}`}
-        style={{ aspectRatio: ratio, position: "relative", overflow: "hidden", ...style }}
-      >
-        <img
-          src={src}
-          alt={prompt}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-        />
-        <div className="ph-corner" style={{ position: "absolute", top: 12, left: 12, zIndex: 2 }}>
-          {code}
-        </div>
-      </div>
-    );
-  }
+export function ImgPlaceholder({ code, prompt, src, ratio = "4 / 3", style = {} }) {
   return (
-    <div
-      className={`img-placeholder ${dark ? "dark" : ""}`}
-      style={{ aspectRatio: ratio, ...style }}
-    >
-      <div className="ph-corner">{code}</div>
-      <div className="ph-caption">
-        <div style={{ opacity: 0.55, marginBottom: 8, fontSize: 9 }}>// designer prompt</div>
-        {prompt}
-      </div>
+    <div className={src ? "media" : "img-placeholder"} style={{ aspectRatio: ratio, ...style }}>
+      {src ? <img src={src} alt={prompt} loading="lazy" /> : (
+        <div className="ph-caption">
+          <div style={{ opacity: 0.55, marginBottom: 8, fontSize: 9 }}>// designer prompt</div>
+          {prompt}
+        </div>
+      )}
+      <span className="tag">{code}</span>
     </div>
   );
 }
 
-export function Reveal({ children, delay = 0, as: Tag = "div", className = "", ...rest }) {
+// Fades/slides children in the first time they scroll into view. `delay` is in ms.
+export function Reveal({ children, delay = 0, as: Tag = "div", className = "", style, ...rest }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -42,46 +25,48 @@ export function Reveal({ children, delay = 0, as: Tag = "div", className = "", .
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => setVisible(true), delay);
+          setVisible(true);
           io.disconnect();
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [delay]);
+  }, []);
   return (
-    <Tag ref={ref} className={`reveal ${visible ? "in" : ""} ${className}`} {...rest}>
+    <Tag
+      ref={ref}
+      className={`reveal ${visible ? "in" : ""} ${className}`}
+      style={delay ? { "--d": `${delay}ms`, ...style } : style}
+      {...rest}
+    >
       {children}
     </Tag>
   );
 }
 
-export function SectionHead({ code, label, title, subtitle }) {
+export function SectionHead({ code, label, title, subtitle, actions }) {
   return (
-    <div className="section-head">
-      <div className="meta">
-        <span className="code">{code}</span>
-        <span>{label}</span>
-      </div>
+    <Reveal className={`section-head ${subtitle ? "" : "section-head--stack"}`}>
       <div>
-        {title && (
-          <h2 className="display-l" style={{ margin: 0, maxWidth: "20ch" }}>
-            {title}
-          </h2>
-        )}
-        {subtitle && (
-          <p className="body-l" style={{ marginTop: 20, maxWidth: "58ch" }}>
-            {subtitle}
-          </p>
-        )}
+        <span className="eyebrow">
+          {code}
+          {label && <span style={{ opacity: 0.55 }}>— {label}</span>}
+        </span>
+        {title && <h2 className="display-l">{title}</h2>}
       </div>
-    </div>
+      {subtitle && (
+        <div className="section-head__side">
+          <p className="lead">{subtitle}</p>
+          {actions}
+        </div>
+      )}
+    </Reveal>
   );
 }
 
-export function Counter({ to, duration = 1400, prefix = "", suffix = "", decimals = 0 }) {
+export function Counter({ to, duration = 1600, prefix = "", suffix = "", decimals = 0 }) {
   const [val, setVal] = useState(0);
   const ref = useRef(null);
   useEffect(() => {
@@ -94,7 +79,7 @@ export function Counter({ to, duration = 1400, prefix = "", suffix = "", decimal
         const start = performance.now();
         const tick = (t) => {
           const p = Math.min(1, (t - start) / duration);
-          const eased = 1 - Math.pow(1 - p, 3);
+          const eased = 1 - Math.pow(1 - p, 4);
           setVal(to * eased);
           if (p < 1) requestAnimationFrame(tick);
         };
@@ -116,27 +101,24 @@ export function Counter({ to, duration = 1400, prefix = "", suffix = "", decimal
 }
 
 export function Wordmark({ size = 24, dark = false }) {
-  const fontSize = size;
-  const ink = dark ? "#ffffff" : "#0e1116";
-  const grey = "#9aa3ad";
   return (
     <span
       style={{
-        fontFamily: "var(--display)",
+        fontFamily: "var(--brand)",
         fontWeight: 800,
-        fontSize,
+        fontSize: size,
         letterSpacing: "-0.04em",
         lineHeight: 1,
         display: "inline-flex",
         alignItems: "baseline",
-        gap: fontSize * 0.18,
-        color: ink,
+        gap: size * 0.18,
+        color: dark ? "#ffffff" : "#0f1512",
       }}
     >
       <span>
         lea<span style={{ color: "#18C25A" }}>f</span>tex
       </span>
-      <span style={{ color: grey, fontWeight: 700 }}>bio</span>
+      <span style={{ color: dark ? "#82948a" : "#9aa29d", fontWeight: 700 }}>bio</span>
     </span>
   );
 }
