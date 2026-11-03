@@ -50,7 +50,7 @@ export default function Advantage() {
           }
         />
 
-        <div className="bento">
+        <div className="bento m-scroll">
           {ADVANTAGES.map((a, i) => (
             <Reveal key={a.title} delay={i * 90}>
               <div className={`card bento-card card--hover ${i === 0 ? "card--dark" : ""}`}>

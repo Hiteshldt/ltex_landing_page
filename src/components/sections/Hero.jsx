@@ -42,7 +42,7 @@ export default function Hero() {
 
           <div className="btn-row hero__ctas fade-up" style={{ "--d": "750ms" }}>
             <Link href="/products" className="btn btn-green">
-              Explore our materials <Arrow />
+              <span>Explore <span className="hide-sm">our </span>materials</span> <Arrow />
             </Link>
             <Link href="/contact" className="btn btn-ghost">Request a sample</Link>
           </div>

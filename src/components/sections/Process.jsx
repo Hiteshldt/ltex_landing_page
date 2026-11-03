@@ -100,7 +100,7 @@ export default function Process() {
             </div>
           </Reveal>
 
-          <ol className="steps" style={{ listStyle: "none", margin: 0, padding: 0 }}>
+          <ol className="steps m-scroll">
             {STEPS.map((s, i) => (
               <Reveal as="li" key={s.n} delay={i * 70}>
                 <div className={`step ${i === active ? "is-active" : ""}`} onMouseEnter={() => setActive(i)} onClick={() => setActive(i)}>
