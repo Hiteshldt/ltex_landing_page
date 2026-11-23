@@ -11,7 +11,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: { absolute: "LeafTex — Sustainable Fibers, Vegan Leather & Edible Coating" },
   description:
-    "LeafTex upcycles banana, pineapple and algae waste into natural fiber, vegan leather and Leaf-Guard™ edible coating — blockchain-traceable, made in Coimbatore.",
+    "LeafTex upcycles banana, pineapple and microalgae waste into natural fiber, vegan leather and Leaf-Guard™ edible coating — blockchain-traceable, made in Coimbatore.",
   path: "/",
   image: "home",
   socialTitle: "LeafTex — Farm to Fashion. Trace your thread.",

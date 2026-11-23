@@ -5,11 +5,11 @@ import Icon, { Arrow } from "@/components/ui/Icon";
 export const faqData = [
   {
     q: "What feedstock does LeafTex use?",
-    a: "We upcycle three streams of agricultural and marine waste: banana pseudostem (post-harvest stems from banana FPOs), pineapple leaf waste, and responsibly-harvested macro-algae. All three are residues that would otherwise be burned, discarded, or left to rot.",
+    a: "We upcycle three feedstock streams: banana pseudostem (post-harvest stems from banana FPOs), pineapple leaf waste, and cultivated microalgae. The banana and pineapple streams are residues that would otherwise be burned, discarded, or left to rot.",
   },
   {
     q: "What products do you make, and how are they related?",
-    a: "One integrated platform yields several commercial outputs: high-tenacity natural fibers (banana, pineapple), premium cruelty-free leathers — vegan leather plus biodegradable algae leather — and Leaf-Guard™, a starch-based edible coating that extends produce shelf-life by 40–60%. Diversifying outputs hedges market cycles and pushes feedstock utilization to 100%.",
+    a: "One integrated platform yields several commercial outputs: high-tenacity natural fibers (banana, pineapple), premium cruelty-free leathers — vegan leather plus biodegradable microalgae-based leather — and Leaf-Guard™, a starch-based edible coating that extends produce shelf-life by 40–60%. Diversifying outputs hedges market cycles and pushes feedstock utilization to 100%.",
   },
   {
     q: "How does blockchain traceability work?",

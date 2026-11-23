@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { Reveal, SectionHead } from "@/components/ui/Primitives";
 
 const STEPS = [
-  { n: "1", t: "Sourcing Feedstock", d: "Pseudostems from banana FPOs, pineapple leaves from orchards, and responsibly-harvested marine algae." },
-  { n: "2", t: "Extraction Hubs", d: "Mechanical decortication and green extraction pull premium fiber from crop and marine wastes." },
+  { n: "1", t: "Sourcing Feedstock", d: "Pseudostems from banana FPOs, pineapple leaves from orchards, and cultivated microalgae." },
+  { n: "2", t: "Extraction Hubs", d: "Mechanical decortication and green extraction pull premium fiber from crop wastes." },
   { n: "3", t: "Combing & Spinning", d: "Raw fibers are degummed, combed, and blended for high-tenacity industrial spinning." },
-  { n: "4", t: "Biomaterial Synthesis", d: "Internal plant starches and marine polymers are formulated into leathers and edible films." },
+  { n: "4", t: "Biomaterial Synthesis", d: "Internal plant starches and microalgae polymers are formulated into leathers and edible films." },
   { n: "5", t: "Organic Recycling", d: "Residual cellulose pulp is fully composted, locking nutrients back into organic form." },
   { n: "6", t: "Back to Cultivators", d: "Compost delivered free to partner farmers and growers, completely closing the circular loop." },
 ];

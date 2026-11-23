@@ -7,29 +7,29 @@ import JsonLd from "@/components/ui/JsonLd";
 import { pageMetadata, productLd } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Algae Leather — Biodegradable Vegan Leather",
+  title: "Microalgae-Based Leather — Biodegradable Vegan Leather",
   description:
-    "Supple, 100% biodegradable vegan leather cast from macro-algae — naturally anti-microbial and flame-retardant. Request a swatch from LeafTex.",
+    "Supple, 100% biodegradable vegan leather cast from microalgae — naturally anti-microbial and flame-retardant. Request a swatch from LeafTex.",
   path: "/products/algae-leather",
   image: "algae-leather",
 });
 
-const SPECS = [["Source", "Macro-algae"], ["Thickness", "0.8–1.4 mm"], ["Finish", "Supple matte"], ["Property", "Biodegradable"]];
+const SPECS = [["Source", "Microalgae"], ["Thickness", "0.8–1.4 mm"], ["Finish", "Supple matte"], ["Property", "Biodegradable"]];
 
 const FEATURES = [
-  "Cast from responsibly-harvested marine macro-algae",
+  "Cast from cultivated microalgae biomass",
   "Supple hand — naturally anti-microbial and flame-retardant",
   "100% biodegradable with a soft, skin-soothing finish",
   "Customizable for fashion, footwear, and accessories",
 ];
 
 const productSchema = productLd({
-  name: "LeafTex Algae Leather",
-  description: "Supple, biodegradable vegan leather cast from responsibly-harvested macro-algae — naturally anti-microbial and flame-retardant.",
+  name: "LeafTex Microalgae-Based Leather",
+  description: "Supple, biodegradable vegan leather cast from microalgae — naturally anti-microbial and flame-retardant.",
   path: "/products/algae-leather",
   image: "/algae-leather.webp",
   category: "Vegan leather",
-  material: ["Macro-algae"],
+  material: ["Microalgae"],
 });
 
 export default function AlgaeLeatherPage() {
@@ -37,15 +37,15 @@ export default function AlgaeLeatherPage() {
     <>
       <JsonLd data={productSchema} />
       <PageIntro
-        crumbs={[["Home", "/"], ["Products", "/products"], ["Algae Leather", "/products/algae-leather"]]}
-        eyebrow="Products · Algae Leather"
-        title={<>Leather, grown from <span className="green-word">the sea.</span></>}
-        intro="Algae Leather is our marine-based vegan leather — cast from responsibly-harvested macro-algae into a supple, fully biodegradable material. It turns blooms that choke coastal ecosystems into a premium, cruelty-free alternative to animal hide."
+        crumbs={[["Home", "/"], ["Products", "/products"], ["Microalgae-Based Leather", "/products/algae-leather"]]}
+        eyebrow="Products · Microalgae-Based Leather"
+        title={<>Leather, grown from <span className="green-word">microalgae.</span></>}
+        intro="Our microalgae-based leather is a vegan leather cast from cultivated microalgae into a supple, fully biodegradable material — a premium, cruelty-free alternative to animal hide."
         primary={{ href: "/contact", label: "Request a swatch" }}
         secondary={{ href: "/contact", label: "Request pricing" }}
         aside={
           <div className="aside-media">
-            <img src="/algae-leather.webp" alt="Roll of sage-green algae leather with a fine pebbled grain" width={1200} height={1200} />
+            <img src="/algae-leather.webp" alt="Roll of sage-green microalgae-based leather with a fine pebbled grain" width={1200} height={1200} />
           </div>
         }
       />
@@ -56,7 +56,7 @@ export default function AlgaeLeatherPage() {
             <Reveal className="card card--dark props__stat">
               <span className="label-mono">biodegradable</span>
               <div className="props__k">100%</div>
-              <p>Supple marine vegan leather cast from responsibly-harvested macro-algae. Naturally anti-microbial and flame-retardant.</p>
+              <p>Supple microalgae-based vegan leather, cast from cultivated microalgae. Naturally anti-microbial and flame-retardant.</p>
             </Reveal>
             <Reveal delay={100} className="card props__list">
               <span className="eyebrow">Key properties</span>

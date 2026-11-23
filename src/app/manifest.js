@@ -3,7 +3,7 @@ export default function manifest() {
     name: "LeafTex — Farm to Fashion",
     short_name: "LeafTex",
     description:
-      "Biomaterials platform upcycling banana, pineapple and algae waste into fibers, vegan leather and edible coatings.",
+      "Biomaterials platform upcycling banana, pineapple and microalgae waste into fibers, vegan leather and edible coatings.",
     start_url: "/",
     display: "standalone",
     background_color: "#fbfaf7",

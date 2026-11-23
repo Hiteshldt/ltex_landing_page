@@ -9,7 +9,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Sustainable Materials: Fibers, Leathers & Coatings",
   description:
-    "Banana & pineapple fibers, vegan leather in five colorways, biodegradable algae leather and Leaf-Guard™ edible coating — all traceable to source.",
+    "Banana & pineapple fibers, vegan leather in five colorways, biodegradable microalgae-based leather and Leaf-Guard™ edible coating — all traceable to source.",
   path: "/products",
   image: "products",
 });

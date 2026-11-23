@@ -3,7 +3,7 @@ import Icon from "@/components/ui/Icon";
 const ITEMS = [
   "Farm to Fashion",
   "Trace your thread",
-  "Banana, pineapple & algae",
+  "Banana, pineapple & microalgae",
   "100% waste upcycling",
   "Native blockchain",
   "Made in Coimbatore",

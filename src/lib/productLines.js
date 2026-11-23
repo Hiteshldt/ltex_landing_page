@@ -16,10 +16,10 @@ export const PRODUCT_LINES = [
   },
   {
     href: "/products/algae-leather",
-    name: "Algae Leather",
-    tag: "Marine · biodegradable",
+    name: "Microalgae-Based Leather",
+    tag: "Microalgae · biodegradable",
     img: "/algae-leather.webp",
-    desc: "A supple, fully biodegradable leather cast from responsibly-harvested macro-algae — naturally anti-microbial and flame-retardant.",
+    desc: "A supple, fully biodegradable leather cast from cultivated microalgae — naturally anti-microbial and flame-retardant.",
   },
   {
     href: "/products/leaf-guard",

@@ -29,7 +29,7 @@ export default function Products() {
             code="Products"
             label="Material library"
             title={<>Premium materials, made <span className="green-word">to spec.</span></>}
-            subtitle="Banana and pineapple fibers, plus vegan and algae leathers — all traceable to source. Every swatch ships with full chain-of-custody data. Sample kits ship within five business days."
+            subtitle="Banana and pineapple fibers, plus vegan and microalgae-based leathers — all traceable to source. Every swatch ships with full chain-of-custody data. Sample kits ship within five business days."
           />
 
           <div className="subhead">
@@ -97,9 +97,9 @@ export default function Products() {
                   <div className="callout__thumb"><img src="/algae-leather.webp" alt="" loading="lazy" /></div>
                 </div>
                 <div>
-                  <h3>Algae <span className="green-word">Leather</span></h3>
+                  <h3>Microalgae-Based <span className="green-word">Leather</span></h3>
                   <p className="body-s">
-                    Supple marine vegan leather cast from responsibly-harvested macro-algae. Naturally anti-microbial and flame-retardant.
+                    Supple microalgae-based vegan leather, cast from cultivated microalgae. Naturally anti-microbial and flame-retardant.
                   </p>
                 </div>
                 <Link href="/products/algae-leather" className="btn btn-ghost btn-sm">View details <Arrow /></Link>

@@ -5,8 +5,8 @@ import { Arrow } from "@/components/ui/Icon";
 const STATS = [
   {
     n: 150, unit: "M",
-    label: "Tons of crop & marine waste annually",
-    sub: "Discards from banana, pineapple, and algae cultivation left to rot or burn.",
+    label: "Tons of crop & biomass waste annually",
+    sub: "Discards from banana, pineapple, and microalgae cultivation left to rot or burn.",
   },
   {
     n: 90, unit: "%",
@@ -28,7 +28,7 @@ export default function Problem() {
           code="Problem"
           label="A multi-waste crisis"
           title={<>Three industries, <span className="green-word">one feedstock</span> — upcycled.</>}
-          subtitle="Farmers burn banana stems and pineapple leaves while algae blooms clog coastlines. We upcycle all three on one materials platform."
+          subtitle="Farmers burn banana stems and pineapple leaves. We upcycle them — alongside cultivated microalgae — on one materials platform."
         />
 
         <div className="stat-row">
@@ -48,7 +48,7 @@ export default function Problem() {
           <div>
             <span className="eyebrow">The opportunity</span>
             <p>
-              Upcycle banana, pineapple, and algae residues into premium fibers, vegan leathers, and edible
+              Upcycle banana, pineapple, and microalgae residues into premium fibers, vegan leathers, and edible
               protective coatings.
             </p>
           </div>
