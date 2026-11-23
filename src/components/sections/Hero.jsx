@@ -36,7 +36,7 @@ export default function Hero() {
           </h1>
 
           <p className="lead hero__lead fade-up" style={{ "--d": "600ms" }}>
-            LeafTex turns <strong>banana, pineapple and algae waste</strong> into high-tenacity fiber, vegan leather,
+            LeafTex turns <strong>banana, pineapple and microalgae waste</strong> into high-tenacity fiber, vegan leather,
             and an edible coating that keeps produce fresh up to 60% longer.
           </p>
 

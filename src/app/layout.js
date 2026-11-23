@@ -19,7 +19,7 @@ const serif = Instrument_Serif({
 const brand = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["700", "800"], variable: "--font-brand", display: "swap" });
 
 const DESCRIPTION =
-  "LeafTex upcycles banana, pineapple and algae waste into natural fiber, vegan leather and Leaf-Guard™ edible coating — blockchain-traceable, made in Coimbatore.";
+  "LeafTex upcycles banana, pineapple and microalgae waste into natural fiber, vegan leather and Leaf-Guard™ edible coating — blockchain-traceable, made in Coimbatore.";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -32,7 +32,8 @@ export const metadata = {
   keywords: [
     "banana fiber",
     "pineapple fiber",
-    "algae leather",
+    "microalgae leather",
+    "microalgae-based leather",
     "vegan leather",
     "sustainable textiles",
     "biomaterials",

@@ -47,7 +47,7 @@ export default function Footer() {
           <div className="footer-brand">
             <Wordmark size={22} dark />
             <p>
-              Biomaterials platform upcycling banana, pineapple, and algae waste into premium fibers,
+              Biomaterials platform upcycling banana, pineapple, and microalgae waste into premium fibers,
               vegan leather, and edible coatings — with native blockchain traceability.
             </p>
             <div className="footer-contact">

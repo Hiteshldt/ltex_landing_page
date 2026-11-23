@@ -1,7 +1,7 @@
 // Animated overview of the two systems behind LeafTex: feedstock flows through the zero-waste
 // hub into four outputs (top), and every step is written to the chain-of-custody ledger (bottom).
 // Pure SVG + CSS animation, so it renders on the server.
-const INPUTS = ["Banana stems", "Pineapple leaves", "Macro-algae"].map((label, i) => ({ label, y: 104 + i * 70 }));
+const INPUTS = ["Banana stems", "Pineapple leaves", "Microalgae"].map((label, i) => ({ label, y: 104 + i * 70 }));
 const OUTPUTS = [
   ["Fiber", "#18C25A"],
   ["Vegan leather", "#3aa66a"],
@@ -23,7 +23,7 @@ const outPath = (y) => `M${HUB.x + HUB.r} ${HUB.y} C 392 ${HUB.y}, 392 ${y}, 424
 export default function PlatformFlow() {
   return (
     <div className="flowcard">
-      <svg className="flow-desktop" viewBox="0 0 600 500" role="img" aria-label="Banana stems, pineapple leaves and macro-algae flow into the LeafTex zero-waste hub and out as fiber, vegan leather, Leaf-Guard coating and compost, while every step — farm, extraction, QA and shipping — is recorded on the blockchain ledger">
+      <svg className="flow-desktop" viewBox="0 0 600 500" role="img" aria-label="Banana stems, pineapple leaves and microalgae flow into the LeafTex zero-waste hub and out as fiber, vegan leather, Leaf-Guard coating and compost, while every step — farm, extraction, QA and shipping — is recorded on the blockchain ledger">
         <defs>
           <radialGradient id="flow-hub-glow">
             <stop offset="0%" stopColor="#18C25A" stopOpacity="0.28" />
@@ -107,7 +107,7 @@ export default function PlatformFlow() {
 }
 
 // Stacked version of the same diagram for narrow screens.
-const M_INPUTS = ["Banana stems", "Pineapple", "Macro-algae"].map((label, i) => ({ label, x: 14 + i * 106 }));
+const M_INPUTS = ["Banana stems", "Pineapple", "Microalgae"].map((label, i) => ({ label, x: 14 + i * 106 }));
 const M_HUB = { x: 170, y: 176, r: 52 };
 
 function MobileFlow() {

@@ -36,16 +36,16 @@ const PRODUCTS = [
   {
     id: "algae",
     code: "P—03",
-    name: "Algae Leather",
-    tag: "Bio-engineered marine seaweed",
+    name: "Microalgae-Based Leather",
+    tag: "Bio-engineered microalgae",
     src: "/algae-leather.webp",
-    alt: "Roll of sage-green algae leather",
+    alt: "Roll of sage-green microalgae-based leather",
     bullets: [
-      "Cast from responsibly-harvested macro-algae",
+      "Cast from cultivated microalgae biomass",
       "Supple hand, naturally anti-microbial & flame-retardant",
       "100% biodegradable with a soft, skin-soothing finish",
     ],
-    spec: [["Source", "Macro-algae"], ["Thickness", "0.8–1.4 mm"], ["Property", "Biodegradable"]],
+    spec: [["Source", "Microalgae"], ["Thickness", "0.8–1.4 mm"], ["Property", "Biodegradable"]],
   },
 ];
 
@@ -61,7 +61,7 @@ export default function Platform({
       A biomaterials platform — <span className="green-word">three</span> sustainable materials.
     </>
   ),
-  subtitle = "Banana stems, pineapple leaves and macro-algae — upcycled into high-tenacity fibers and supple, biodegradable leather.",
+  subtitle = "Banana stems, pineapple leaves and microalgae — upcycled into high-tenacity fibers and supple, biodegradable leather.",
 }) {
   const products = PRODUCTS.filter((p) => productIds.includes(p.id));
   const [active, setActive] = useState(0);

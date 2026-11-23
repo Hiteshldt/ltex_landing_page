@@ -9,14 +9,14 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "About Us — Biomaterials from Coimbatore, India",
   description:
-    "LeafTex is a Coimbatore-based biomaterials company turning agricultural and marine waste into premium fibers, vegan leather and edible coatings.",
+    "LeafTex is a Coimbatore-based biomaterials company turning agricultural waste and microalgae into premium fibers, vegan leather and edible coatings.",
   path: "/about",
   image: "about",
 });
 
 const FACTS = [
   ["100%", "Biomass utilization", "vs. 15–20% industry avg"],
-  ["3×", "Upcycled sources", "banana · pineapple · algae"],
+  ["3×", "Upcycled sources", "banana · pineapple · microalgae"],
   ["40–60%", "Shelf-life uplift", "verified on fresh produce"],
 ];
 
